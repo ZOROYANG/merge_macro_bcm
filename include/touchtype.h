@@ -9,8 +9,8 @@ int touchtype(const vector<BLOCKINFO> &block, const vector<CONDUCTORINFO> &condu
     
     int typeup = 0;
     int typedown = 0;
-    for(int i = 0 ; i < block.size(); i++){
-        for(int j = 0 ; j < conductor.size();j++){
+    for(int i = 0 ; i < static_cast<int>(block.size()); i++){
+        for(int j = 0 ; j < static_cast<int>(conductor.size());j++){
             if(conductor[j].layerNum == i+1){
                 if(isInInterface(conductor[j].topP, block[i].topP)){
                     typeup = 1 ;
@@ -20,8 +20,8 @@ int touchtype(const vector<BLOCKINFO> &block, const vector<CONDUCTORINFO> &condu
         }
         if(typeup == 1){break;}
     }
-    for(int i = 0 ; i < block.size(); i++){
-        for(int j = 0 ; j < conductor.size();j++){
+    for(int i = 0 ; i < static_cast<int>(block.size()); i++){
+        for(int j = 0 ; j < static_cast<int>(conductor.size());j++){
             if(conductor[j].layerNum == i+1){
                 if(isInInterface(conductor[j].botP, block[i].botP)){
                     typedown = -1 ;
@@ -33,17 +33,19 @@ int touchtype(const vector<BLOCKINFO> &block, const vector<CONDUCTORINFO> &condu
     }
 //	std::cout << "typeup " << typeup << "   typedown " << typedown << std::endl; 
     if(typeup == 1 && typedown == -1 ){
-        std::cout << " Only one touch type is allow at one time" << std::endl;		 
+        std::cout << " Only one touch type is allowed at one time" << std::endl;		 
         exit(1);
     }
     if(typeup == 1 ){
         return 1;
-    }if(typedown == -1){
+    }
+    if(typedown == -1){
         return -1;
-    }if(typeup == typedown && typeup == 0){
+    }
+    if(typeup == typedown && typeup == 0){
         return 0;
     }
-        
+    return -2; // unexpected value    
 }
 
 #endif

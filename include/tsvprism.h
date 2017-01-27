@@ -23,7 +23,7 @@ void EleGen_tsv_prism(int bid){//just handle 4 vertex
     //side surface
     TPOINT *start, *start1;
     int loop_num;
-    int rnx, rny;
+    int rnx;//, rny;
     //in side surface
     start=vertexBuf[bid]+4;
     start1=vertexTopBuf[bid]+4;

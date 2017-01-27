@@ -28,9 +28,9 @@ void cube_point_gen(int bid){
 */
 void EleGen_cube(int bid){
     int nx, ny, nz;
-    int cnx[2];
-    int cny[2];
-    int cnz[2];
+    //int cnx[2];
+    //int cny[2];
+    //int cnz[2];
     nx = usTempEle[bid][0];
     ny = usTempEle[bid][1];
     nz = usTempEle[bid][2];

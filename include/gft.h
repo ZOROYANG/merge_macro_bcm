@@ -7,7 +7,7 @@ void formula_solve(){
     //the second part of formula 30: Moi*D
     //in the end, the matrix_A(or called M) holds the result
     int num_i=cur_ele_id[0]-interface_start_id[0];
-    for(int i=0;i<Curmed;i++){
+    for(int i=0;i<static_cast<int>(Curmed);i++){
         for(int j=0;j<interface_start_id[i];j++){
             for(int k=interface_start_id[i];k<cur_ele_id[i];k++){
                 matrix_A[i][j][k] *= matrix_D[i][k-interface_start_id[i]];
@@ -38,7 +38,7 @@ void formula_solve(){
     //the real part 2 of formula 30
     final_res = new double[interface_start_id[0] + interface_start_id[1]];
     int cnt=0;
-    for(int i=0;i<Curmed;i++){
+    for(int i=0;i<static_cast<int>(Curmed);i++){
         for(int j=0;j<interface_start_id[i];j++){
             final_res[cnt+j] = 0.0;
             for(int k=0;k<num_i;k++){

@@ -100,7 +100,7 @@ void printplane(const TPOINT *a,int n){
 }
 void printinterface(const DPLANE &interfacess){
     printplane(interfacess.windows.vertex,4);
-    for(int i = 0 ; i < interfacess.pores.size();i++){
+    for(int i = 0 ; i < static_cast<int>(interfacess.pores.size());i++){
         printplane(interfacess.pores[i].vertex,4); 
     }
 }
@@ -117,7 +117,7 @@ double areaBound(TPOINT *p1, TPOINT *p2, unsigned int n){
 
 void segExtract(){
 
-    assert(block_number == blocks.size());
+    assert(block_number == static_cast<int>(blocks.size()));
 
     segments_x.resize(block_number);	
     segments_y.resize(block_number);	
@@ -162,7 +162,7 @@ void areaExtract(){
     double lengthx, lengthy;
     for(size_t i = 0 ; i < 2; i++){
         Areas[i].resize(blocks.size()+1);
-        for(size_t j = 0 ; j < blocks.size() + 1 ; j++){
+        for(size_t j = 0 ; j < static_cast<size_t>(blocks.size()) + 1 ; j++){
             if( i == 0){
                 if(j == 0){
         
@@ -242,8 +242,8 @@ void planeExtract(const bool standard, const double h, const size_t low, const s
         std::cout << conductors[i].xEle << " " << conductors[i].yEle << " " << conductors[i].zEle << std::endl;
     }
 */
-    bool up = false;
-    bool down = false;
+    //bool up = false;
+    //bool down = false;
 
     type = touchtype(blocks,conductors);
     
@@ -251,12 +251,12 @@ void planeExtract(const bool standard, const double h, const size_t low, const s
     //std::cout << " type = " << type << std::endl;
     if ( type == 0 ){
     //conductors do not touch interface
-        for(int i = 0 ; i < blocks.size(); i++){
+        for(int i = 0 ; i < static_cast<int>(blocks.size()); i++){
             DPLANE ptemp[6];
             std::vector<DPLANE> dcond;
             std::vector<DPLANE> dbloc;
             int conductorid = 0 ;
-            for(int j = 0 ; j < conductors.size();j++){
+            for(int j = 0 ; j < static_cast<int>(conductors.size());j++){
                 if(conductors[j].layerNum == i + 1){
                     conductorid = j + 1;				
                     
@@ -301,7 +301,7 @@ void planeExtract(const bool standard, const double h, const size_t low, const s
                         dbloc.push_back(ptemp[k]);
                     }
                 }
-            }else if(i > 0 && i == blocks.size() -1 ){
+            }else if(i > 0 && i == static_cast<int>(blocks.size()) -1 ){
                 for(int k = 1 ; k < 5; k++){
                     dbloc.push_back(ptemp[k]);
                 }
@@ -311,13 +311,13 @@ void planeExtract(const bool standard, const double h, const size_t low, const s
                     dbloc.push_back(ptemp[k]);
                 }
             }
-            if(blocks.size() > 1 && i < blocks.size()-1){
+            if(blocks.size() > 1 && i < static_cast<int>(blocks.size())-1){
                 dinterfaces.push_back(ptemp[0]);
             }
             dblocks.push_back(dbloc);
         }	
     }else if( type == 1){				
-        for(int i = 0 ; i < blocks.size() ; i++){
+        for(int i = 0 ; i < static_cast<int>(blocks.size()) ; i++){
             DPLANE surface;
             DPLANE ptemp[6];
             vector<DPLANE> dcond;
@@ -325,14 +325,14 @@ void planeExtract(const bool standard, const double h, const size_t low, const s
             int conductorid = 0;
             if(interface.pores.size()>0){
             //	std::cout << " the " << i << "th" <<" time!" << std::endl;
-                for ( int ii = 0 ; ii < interface.pores.size();ii++){
+                for ( int ii = 0 ; ii < static_cast<int>(interface.pores.size());ii++){
                     surface.windows = interface.pores[ii];
                     surface.inverse = interface.inverse;
                     dcond.push_back(surface);
                 }
             }
             reset(interface);
-            for(int j = 0 ; j < conductors.size(); j++){
+            for(int j = 0 ; j < static_cast<int>(conductors.size()); j++){
                 
                 if(conductors[j].layerNum == i + 1){
                 
@@ -376,7 +376,7 @@ void planeExtract(const bool standard, const double h, const size_t low, const s
             for(int k = 0 ; k < 6 ; k++)
                 casePlane(false, ptemp[k],i + 1 , MAXNUM, k , false);
             ptemp[5].inverse = true;
-            if(blocks.size() > 1 && i < blocks.size()-1){
+            if(blocks.size() > 1 && i < static_cast<int>(blocks.size())-1){
                 interface = ptemp[0];
                 dinterfaces.push_back(interface);
             }
@@ -394,7 +394,7 @@ void planeExtract(const bool standard, const double h, const size_t low, const s
                         dbloc.push_back(ptemp[k]);
                     }
                 }
-            }else if( i > 0 && i == blocks.size()-1){
+            }else if( i > 0 && i == static_cast<int>(blocks.size())-1){
                 for ( int k = 1 ; k < 5; k++){
                     dbloc.push_back(ptemp[k]);
                 }
@@ -415,14 +415,14 @@ void planeExtract(const bool standard, const double h, const size_t low, const s
             vector<DPLANE> dbloc;	
             int conductorid = 0;
             if(interface.pores.size()>0){
-                for ( int k = 0 ; k < interface.pores.size();k++){
+                for ( int k = 0 ; k < static_cast<int>(interface.pores.size());k++){
                     surface.windows = interface.pores[k];
                     surface.inverse = interface.inverse;
                     dcond.push_back(surface);
                 }
             }
             reset(interface);
-            for(int j = 0 ; j < conductors.size(); j++){
+            for(int j = 0 ; j < static_cast<int>(conductors.size()); j++){
                 
                 if(conductors[j].layerNum == i + 1){
                 
@@ -481,7 +481,7 @@ void planeExtract(const bool standard, const double h, const size_t low, const s
                         dbloc.push_back(ptemp[k]);
                     }
                 }
-            }else if(i > 0 && i == blocks.size()-1){
+            }else if(i > 0 && i == static_cast<int>(blocks.size())-1){
                 for ( int k = 1 ; k < 5; k++){
                     dbloc.push_back(ptemp[k]);
                 }
@@ -493,6 +493,8 @@ void planeExtract(const bool standard, const double h, const size_t low, const s
             }
             dblocks.push_back(dbloc);
         }
+    }else{
+        cout << "unexpected type! Program end!" << endl;
     }
 }	
 #endif

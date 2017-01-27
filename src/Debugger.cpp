@@ -170,38 +170,38 @@ void Debugger::Cut_print(std::vector<double> vx, std::vector<double> vy, std::ve
     
     fprintf(cuts, "The splitting strategy is:\n");
     fprintf(cuts, "    Dimension X has %lu cut points.\n", vx.size());
-    for(int i = 0; i < vx.size(); ++ i){
+    for(int i = 0; i < static_cast<int>(vx.size()); ++ i){
         fprintf(cuts, "%lf ", vx[i]);
     }
     fprintf(cuts, "\n***********\n");
     
     fprintf(cuts, "    Dimension Y has %lu cut points.\n", vy.size());
-    for(int i = 0; i < vy.size(); ++ i){
+    for(int i = 0; i < static_cast<int>(vy.size()); ++ i){
         fprintf(cuts, "%lf ", vy[i]);
     }
     fprintf(cuts, "\n***********\n");
     
     fprintf(cuts, "    Dimension Z has %lu cut points.\n", vz.size());
-    for(int i = 0; i < vz.size(); ++ i){
+    for(int i = 0; i < static_cast<int>(vz.size()); ++ i){
         fprintf(cuts, "%lf ", vz[i]);
     }
     fprintf(cuts, "\n***********\n");
     
     
     fprintf(cuts, "    Dimension X has %lu ele points.\n", ex.size());
-    for(int i = 0; i < ex.size(); ++ i){
+    for(int i = 0; i < static_cast<int>(ex.size()); ++ i){
         fprintf(cuts, "%lf ", ex[i]);
     }
     fprintf(cuts, "\n***********\n");
     
     fprintf(cuts, "    Dimension Y has %lu ele points.\n", ey.size());
-    for(int i = 0; i < ey.size(); ++ i){
+    for(int i = 0; i < static_cast<int>(ey.size()); ++ i){
         fprintf(cuts, "%lf ", ey[i]);
     }
     fprintf(cuts, "\n***********\n");
     
     fprintf(cuts, "    Dimension Z has %lu ele points.\n", ez.size());
-    for(int i = 0; i < ez.size(); ++ i){
+    for(int i = 0; i < static_cast<int>(ez.size()); ++ i){
         fprintf(cuts, "%lf ", ez[i]);
     }
     fprintf(cuts, "\n***********\n");
@@ -280,8 +280,8 @@ void Debugger::Vec_Mtx_print(std::vector<std::vector<double> > vm, std::string n
     }
     
     fprintf(fcd, "\n");
-    for(int u = 0; u < vm.size(); ++ u){
-        for(int v = 0; v < vm[u].size(); ++ v){
+    for(int u = 0; u < static_cast<int>(vm.size()); ++ u){
+        for(int v = 0; v < static_cast<int>(vm[u].size()); ++ v){
             fprintf(fcd, "%.20lf ", vm[u][v]);
         }
         fprintf(fcd, ";\n");

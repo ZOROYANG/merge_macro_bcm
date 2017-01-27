@@ -20,13 +20,13 @@ void adjustposition(Matrix &m, const std::vector<std::vector<RANGE>> &range){
     assert(m.col == dimension);
     Matrix am(m.row, m.col);
     size_t p = 0;
-    for(int i = 1; i< range.size();i++){
-        for(int j = 0 ; j < range[i].size(); j++){
+    for(int i = 1; i< static_cast<int>(range.size());i++){
+        for(int j = 0 ; j < static_cast<int>(range[i].size()); j++){
             
             if(range[i][j].layerid == i && range[i][j].conductorid != MAXNUM){
                 
                 for(int k = 0 ; k < m.row; k ++){
-                    for( size_t h = p ; h < m.col; h++){
+                    for( size_t h = p ; h < static_cast<size_t>(m.col); h++){
                         if( h < range[i][j].insert - 1){
                             am.data[k][h] = m.data[k][h];
                         }else if( h >= range[i][j].insert - 1 && 
@@ -66,8 +66,8 @@ void MatrixModulate(){
     int dimension = mrange.back().back().end;
     
     std::cout << "mrange.size before modulation" << mrange.size() <<std::endl;;
-    for(int i = 0 ; i< mrange.size();i++){
-        for(int j = 0 ; j < mrange[i].size();j++){
+    for(int i = 0 ; i< static_cast<int>(mrange.size());i++){
+        for(int j = 0 ; j < static_cast<int>(mrange[i].size());j++){
             std::cout << "mrange[i].size " << i << mrange[i].size()<<std::endl;;
             std::cout << "---------******------" << std::endl;
             printrange(mrange[i][j]);
@@ -115,8 +115,8 @@ void MatrixModulate(){
     std::cout << matrixbcm.data[2][920] << std::endl;;	
         
     std::cout << "mrange.size after modulation" << mrange.size() <<std::endl;;
-    for(int i = 0 ; i< mrange.size();i++){
-        for(int j = 0 ; j < mrange[i].size();j++){
+    for(int i = 0 ; i< static_cast<int>(mrange.size());i++){
+        for(int j = 0 ; j < static_cast<int>(mrange[i].size());j++){
             std::cout << "mrange[i].size " << i << mrange[i].size()<<std::endl;;
             std::cout << "---------******------" << std::endl;
             printrange(mrange[i][j]);
@@ -150,7 +150,7 @@ void MatrixCohesion(){
 
 void ModulatePosition(){
     
-    for(int i = 0 ; i< cpos.size(); i++){
+    for(int i = 0 ; i< static_cast<int>(cpos.size()); i++){
         boundary_position.data[0][cpos[i]] = 1e10;
         boundary_position.data[1][cpos[i]] = 1e10;
         boundary_position.data[2][cpos[i]] = 1e10;
@@ -175,7 +175,7 @@ void ModulatePosition(){
         }
     }
     */
-    if(condp.size() != cond_number){
+    if(static_cast<int>(condp.size()) != cond_number){
     exit(1);}
 
 }
@@ -185,11 +185,11 @@ void ModulateBCM(){
     vector<double> row_sum_positive(matrixbcm.row,0);
     vector<double> row_sum_negative(matrixbcm.row,0);
     std::cout << "orignal " << std::endl;
-    for(size_t i = 0 ;  i < matrixbcm.col ; i++){
+    for(size_t i = 0 ;  i < static_cast<size_t>(matrixbcm.col) ; i++){
         diag.push_back(matrixbcm.data[i][i]);
         std::cout << matrixbcm.data[i][i] << std::endl;
         double sum_row = 0, sum_row_p = 0, sum_row_n = 0;
-        for(size_t j = 0 ; j < matrixbcm.row; j++){
+        for(size_t j = 0 ; j < static_cast<size_t>(matrixbcm.row); j++){
             sum_row += matrixbcm.data[i][j];
             if(matrixbcm.data[i][j] >= 0 && i!=j){
                 sum_row_p += matrixbcm.data[i][j];
@@ -204,33 +204,33 @@ void ModulateBCM(){
         row_sum_negative[i] = sum_row_n;
     }
     
-    for(size_t i = 0 ;  i < matrixbcm.row ; i++){
+    for(size_t i = 0 ;  i < static_cast<size_t>(matrixbcm.row) ; i++){
         double increase = row_sum_positive[i] - row_sum[i];
-        for(size_t j = 0 ; j < matrixbcm.col ; j++){
+        for(size_t j = 0 ; j < static_cast<size_t>(matrixbcm.col) ; j++){
             if(matrixbcm.data[i][j] != 0){
                 double modulate = (fabs(matrixbcm.data[i][j])/row_sum_negative[i]) * increase;
                 matrixbcm.data[i][j] += modulate;
             }
         }
     }
-    for(size_t i = 0 ; i < matrixbcm.row ; i++){
-        for(size_t j = 0 ; j < matrixbcm.col ; j++){
+    for(size_t i = 0 ; i < static_cast<size_t>(matrixbcm.row) ; i++){
+        for(size_t j = 0 ; j < static_cast<size_t>(matrixbcm.col) ; j++){
             if(matrixbcm.data[i][j] >= 0 && i != j){
                 matrixbcm.data[i][j] = 0;
             }
         }
     }
-    for(size_t i = 0 ; i < matrixbcm.row ; i++){
-        for(size_t j = 0 ; j < matrixbcm.col ; j++){
+    for(size_t i = 0 ; i < static_cast<size_t>(matrixbcm.row) ; i++){
+        for(size_t j = 0 ; j < static_cast<size_t>(matrixbcm.col) ; j++){
             if(j > i){
                 matrixbcm.data[i][j] =( matrixbcm.data[i][j] + matrixbcm.data[j][i])/ 2;
                 matrixbcm.data[j][i] = matrixbcm.data[i][j];
             }
         }
     }
-    for(size_t i = 0 ; i < matrixbcm.col ; i++){
+    for(size_t i = 0 ; i < static_cast<size_t>(matrixbcm.col) ; i++){
         double sum_row = 0;
-        for(size_t j = 0 ; j < matrixbcm.row; j++){
+        for(size_t j = 0 ; j < static_cast<size_t>(matrixbcm.row); j++){
             sum_row += matrixbcm.data[i][j];
             if(i != j ){
                 matrixbcm.data[i][j] = fabs(matrixbcm.data[i][j]);
@@ -239,7 +239,7 @@ void ModulateBCM(){
         matrixbcm.data[i][i] -= sum_row;
         
         
-        for(size_t j = 0 ; j < matrixbcm.row; j++){
+        for(size_t j = 0 ; j < static_cast<size_t>(matrixbcm.row); j++){
             if(i != j){
                 matrixbcm.data[i][j] = matrixbcm.data[i][j] / matrixbcm.data[i][i];
             }
@@ -250,7 +250,7 @@ void ModulateBCM(){
     }
     std::cout << "error " << std::endl;
     std::cout << _diag[0] << " " << diag[0] << std::endl;
-    for(int i = 0 ; i < diag.size(); i++){
+    for(int i = 0 ; i < static_cast<int>(diag.size()); i++){
         std::cout << diag[i] - _diag[i] << std::endl;
     }	
 }

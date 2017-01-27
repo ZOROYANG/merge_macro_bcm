@@ -46,7 +46,7 @@ void MatrixGen(){
         ntotal=cur_ele_id[i];
         matrix_G[i] = new double[ntotal*ntotal];
         matrix_H[i] = new double[ntotal*ntotal];
-        if(Curblk==1 || Curblk==2 && i==pointInMediumId){
+        if(Curblk==1 || (Curblk==2 && i==pointInMediumId)){
             vector_g[i] = new double[ntotal];
             vector_h[i] = new double[ntotal];
         }
@@ -90,7 +90,7 @@ void MatrixGen(){
 void MatrixGen_More(){
     //W, W[i][j]=diel(i)*Sj
     matrix_w=new double *[Curmed];
-    for(int i=0;i<Curmed;i++){
+    for(int i=0;i<static_cast<int>(Curmed);i++){
         matrix_w[i]=new double[cur_ele_id[i]];
         for(int j=0;j<cur_ele_id[i];j++){
             matrix_w[i][j]=tempelec[i]*ele_cover(i,j);
@@ -99,7 +99,7 @@ void MatrixGen_More(){
     //A=WG(-1)H
     cout<<"begin to generate A:"<<endl;
     matrix_A = new double**[Curmed];
-    for(int i=0;i<Curmed;i++){
+    for(int i=0;i<static_cast<int>(Curmed);i++){
         matrix_A[i] = new double*[cur_ele_id[i]];
         for(int j=0;j<cur_ele_id[i];j++)
             matrix_A[i][j]=new double[cur_ele_id[i]];
@@ -119,7 +119,7 @@ void MatrixGen_More(){
     //D
     int num_i=cur_ele_id[0]-interface_start_id[0];
     matrix_D = new double*[Curmed];
-    for(int i=0;i<Curmed;i++){
+    for(int i=0;i<static_cast<int>(Curmed);i++){
         matrix_D[i]=new double[num_i];
         for(int j=0;j<num_i;j++){
             matrix_D[i][j]=matrix_A[i][j+interface_start_id[i]][j+interface_start_id[i]] 
@@ -128,7 +128,7 @@ void MatrixGen_More(){
         }
     }
     //M : use A to save
-    for(int i=0;i<Curmed;i++){
+    for(int i=0;i<static_cast<int>(Curmed);i++){
         for(int j=0;j<cur_ele_id[i];j++){
             for(int k=0;k<cur_ele_id[i];k++){
                 if(j==k)
@@ -140,7 +140,7 @@ void MatrixGen_More(){
     }
     matrix_X=new double[num_i*num_i];
     //
-    for(int i=0;i<Curmed;i++){
+    for(int i=0;i<static_cast<int>(Curmed);i++){
         for(int j=0;j<num_i;j++){
             for(int k=0;k<num_i;k++){
                 matrix_A[i][interface_start_id[i]+j][interface_start_id[i]+k] *= matrix_D[i][j];
@@ -175,7 +175,7 @@ void bcmgen(const bool cohesion, const bool standard){
         std::cout << std::endl;
         if(block_number > 1){
             std::cout << "Generating Two Layer Bcm: " << std::endl;
-            for(int i = 1 ; i < seg ; i++){
+            for(int i = 1 ; i < static_cast<int>(seg) ; i++){
                 std::cout << std::endl;
                 std::cout << "Interface Position: " << i << ", " << "Total: " << seg << std::endl;
                 std::cout << "Dielectric Pair: " << tempelec[0] << " " << tempelec[1] << std::endl;  
@@ -260,7 +260,7 @@ void tablegen(){
     printf("################################\n");
     tg_init();
     printf("elements generate...\n");
-    for(int i=0; i<Curmed; i++){
+    for(int i=0; i<static_cast<int>(Curmed); i++){
         switch(trans_area_type[i]){
             case CUBE_TRANS_AREA:				
                 cube_point_gen(i);
@@ -287,7 +287,7 @@ void tablegen(){
     //make sure that the interface division is the same
     if(Curmed == 2)
         unify_interface_divide();
-    for(int i=0;i<Curmed;i++){
+    for(int i=0;i<static_cast<int>(Curmed);i++){
         cout<<"ele number["<<i<<"]="<<cur_ele_id[i]<<endl;	
         cout<<"interface start id="<<interface_start_id[i]<<endl;
     }

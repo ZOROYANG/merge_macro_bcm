@@ -86,9 +86,9 @@ public:
             }
     //		std::cout << std::endl;
         }
-        for( int i = 1 ; i < range.size() ; i++){
+        for( int i = 1 ; i < static_cast<int>(range.size()) ; i++){
             int sign = MAXNUM;
-            for(int j = 0 ; j < range[i].size(); j++){
+            for(int j = 0 ; j < static_cast<int>(range[i].size()); j++){
                 int insert = range[i][j].insert;
                 int start = range[i][j].start;
                 int end = range[i][j].end;
@@ -105,7 +105,7 @@ public:
                         continue;
                     }
                 }
-                for(int k = 0 ; k < range[i-1].size();k++){
+                for(int k = 0 ; k < static_cast<int>(range[i-1].size());k++){
                     if(range[i-1][k].conductorid == range[i][j].conductorid &&
                     range[i-1][k].layerid == range[i][j].layerid){
                         range[i-1][k].end += end - start + 1;
@@ -208,14 +208,14 @@ public:
             }
         }
     }
-    Matrix cohesion(int dimension, const std::vector<std::vector<RANGE> > &range, int type ,std::vector<int> &ccp){
+    void cohesion(int dimension, const std::vector<std::vector<RANGE> > &range, int type ,std::vector<int> &ccp){
         
         //std::cout << " cohesion " << std::endl;	
         row = dimension;
         col = dimension;
     //	std::cout << row <<  " " << std::endl;	
-        for(int i = 0 ; i< range.size(); i++){
-            for(int j = 0 ; j < range[i].size();j++){
+        for(int i = 0 ; i< static_cast<int>(range.size()); i++){
+            for(int j = 0 ; j < static_cast<int>(range[i].size());j++){
                 if(type == 0 || type == 1){
                     if(range[i][j].layerid ==  i + 1 && 
                     range[i][j].conductorid != MAXNUM){
@@ -238,8 +238,8 @@ public:
             }
         }
         int shiftcol = 0 ,shift = 0, sign = 0, pre = 0, shiftcl = 0, shiftcll = 0;
-        for(int i = 0 ; i < range.size(); i++){
-            for(int j = 0 ; j < range[i].size() ; j ++){
+        for(int i = 0 ; i < static_cast<int>(range.size()); i++){
+            for(int j = 0 ; j < static_cast<int>(range[i].size()) ; j ++){
                 if(type == 0 || type == 1){
                     if(range[i][j].layerid == i + 1 && range[i][j].conductorid == MAXNUM){
                         sign = range[i][j].start;
@@ -289,73 +289,7 @@ public:
             }
         } 
     }
-/*	Matrix cohesion(int dimension, const std::vector<std::vector<RANGE> > &range, int type){
-        
-        //std::cout << " cohesion " << std::endl;	
-        row = dimension;
-        col = dimension;
-    //	std::cout << row <<  " " << std::endl;	
-        for(int i = 0 ; i< range.size(); i++){
-            for(int j = 0 ; j < range[i].size();j++){
-                if(type == 0 || type == 1){
-                    if(range[i][j].layerid ==  i + 1 && 
-                    range[i][j].conductorid != MAXNUM){
-                        col = col - (range[i][j].end - range[i][j].start);
-                    }
-                }else if(type == -1){
-                    if((range[i][j].layerid ==  i + 1 || range[i][j].layerid == i+2) &&  
-                    range[i][j].conductorid != MAXNUM){
-                        col = col - (range[i][j].end - range[i][j].start);
-                    }
-                }
-            }
-        }
-    //	std::cout << col <<  " " << std::endl;	
-        data = new double *[row];
-        for ( int i = 0 ; i < row ; i++){
-            data[i] = new double[col];
-            for(int j = 0 ; j < col ; j++){
-                data[i][j] = 0;
-            }
-        }
-        int shiftcol = 0 ;
-        for(int i = 0 ; i < range.size(); i++){
-            for(int j = 0 ; j < range[i].size() ; j ++){
-                if(type == 0 || type == 1){
-                    if(range[i][j].layerid ==  i + 1 && 
-                    range[i][j].conductorid != MAXNUM){
-                        int start = range[i][j].start;
-                        int end = range[i][j].end;
-                        for(int k = start - 1 ; k < end ; k++){
-                            data[k][shiftcol] = 1;
-                        }
-                        shiftcol = shiftcol + 1;
-                    }
-                }else if(type == -1){
-                    if((range[i][j].layerid == i + 2 ||range[i][j].layerid ==  i + 1) && 
-                    range[i][j].conductorid != MAXNUM){
-                        int start = range[i][j].start;
-                        int end = range[i][j].end;
-                        for(int k = start - 1 ; k < end ; k++){
-                            data[k][shiftcol] = 1;
-                        }
-                        shiftcol = shiftcol + 1;
-                    }
-                }
-                if(range[i][j].layerid ==  i + 1 && 
-                range[i][j].conductorid == MAXNUM){
-                    int start = range[i][j].start;
-                    int end = range[i][j].end;
-                    for(int k = start - 1 ; k < end ; k++){
-                        data[k][shiftcol]= 1;
-                        shiftcol = shiftcol + 1;
-                    }
-                    
-                }
-            }
-        } 
-    }
-*/
+
     int rows() const { return row;}
     int cols() const { return col;}
 
@@ -475,6 +409,7 @@ public:
         for (int j = 0; j < new_c; j++)
             for (int i = 0; i < new_r; i++)
                 result.elem (i, j) = elem (r1+i, c1+j);
+        return  result;
     }
 
     Matrix& insert (const Matrix& a, int r, int c)

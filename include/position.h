@@ -39,7 +39,7 @@ void PositionRange(){
     size_t layerid;
     size_t  conductorid;
     size_t insert;
-    bool isconductor;
+    //bool isconductor;
     size_t five = 0;
     size_t tlayerid;
     size_t tconductorid;
@@ -51,7 +51,7 @@ void PositionRange(){
             tempstart = tempend + 1;	
         //	std::cout << "dconductors size "  << i << " " << dconductors[i].size() << std::endl;
             if(!dconductors[i][0].isempty){
-                for(int j = 0; j < dconductors[i].size() ; j++){
+                for(int j = 0; j < static_cast<int>(dconductors[i].size()) ; j++){
                 
                     tlayerid = dconductors[i][j].windows.layerid;
                     tconductorid = dconductors[i][j].windows.conductorid;
@@ -74,8 +74,8 @@ void PositionRange(){
                             }else if( i!=0 && five == 1){
                                 for(size_t k = 0 ; k < mrange[i-1].size();k++){
                                 //	std::cout << mrange[i-1].size() << std::endl;
-                                    if(layerid == mrange[i-1][k].layerid && 
-                                    conductorid == mrange[i-1][k].conductorid){
+                                    if(layerid == static_cast<size_t>(mrange[i-1][k].layerid) && 
+                                    conductorid == static_cast<size_t>(mrange[i-1][k].conductorid)){
                                         insert = mrange[i-1][k].insert;
                                     //	std::cout << " insert ----- " << insert << std::endl;
                                     }
@@ -89,15 +89,15 @@ void PositionRange(){
                             tempend = tempend + xEle*yEle;
                             five = 1 ;
                         }
-                    }if( j == dconductors[i].size()-1){
+                    }if( j == static_cast<int>(dconductors[i].size())-1){
                 //		std::cout << " '<<<<....." << i << " "<< five << " " <<j << std::endl;
                         insert = MAXNUM;
                         if(five == 5){
                             insert = tempend - xEle * yEle + 1;
                         }if( i != 0 && five == 1){
-                            for(int k = 0 ; k < mrange[i-1].size();k++){
-                                if(mrange[i-1][k].layerid == layerid && 
-                                mrange[i-1][k].conductorid == conductorid){
+                            for(int k = 0 ; k < static_cast<int>(mrange[i-1].size());k++){
+                                if(static_cast<size_t>(mrange[i-1][k].layerid) == layerid && 
+                                static_cast<size_t>(mrange[i-1][k].conductorid) == conductorid){
                                     insert = mrange[i-1][k].insert;
                                 }
                             }
@@ -109,13 +109,13 @@ void PositionRange(){
             }
             tempstart = tempend + 1;
             //std::cout << "dblock size " << dblocks[i].size() << std::endl;
-            for( int j = 0 ; j < dblocks[i].size(); j++){
+            for( int j = 0 ; j < static_cast<int>(dblocks[i].size()); j++){
                 tlayerid = dblocks[i][j].windows.layerid;
                 tconductorid = dblocks[i][j].windows.conductorid;
                 xEle = dblocks[i][j].windows.xEle;
                 yEle = dblocks[i][j].windows.yEle;
             //	std::cout << "position  " << i << " " << j << " " << xEle << " " << yEle <<std::endl;;
-                if( i + 1 == tlayerid && tconductorid == MAXNUM){
+                if( static_cast<size_t>(i + 1) == tlayerid && tconductorid == MAXNUM){
                     tempend = tempend + xEle * yEle;
                 }
             }
@@ -132,7 +132,7 @@ void PositionRange(){
         //	std::cout << "inverse _ i " << i << " " << inverse_i << std::endl;
             tempstart = tempend + 1;
             if(!dconductors[i][0].isempty){
-                for(int j = 0; j < dconductors[i].size() ; j++){
+                for(int j = 0; j < static_cast<int>(dconductors[i].size()) ; j++){
                 
                     tlayerid = dconductors[i][j].windows.layerid;
                     tconductorid = dconductors[i][j].windows.conductorid;
@@ -153,9 +153,9 @@ void PositionRange(){
                             if(five == 1){
                                 insert = tempend + 1;
                             }if(inverse_i != 0 && five == 5){
-                                for(int k = 0 ; k < mrange[inverse_i-1].size();k++){
-                                    if(mrange[inverse_i-1][k].layerid == layerid && 
-                                    mrange[inverse_i-1][k].conductorid == conductorid){
+                                for(int k = 0 ; k < static_cast<int>(mrange[inverse_i-1].size());k++){
+                                    if(static_cast<size_t>(mrange[inverse_i-1][k].layerid) == layerid && 
+                                    static_cast<size_t>(mrange[inverse_i-1][k].conductorid) == conductorid){
                                         insert = mrange[inverse_i-1][k].insert;
                                     }
                                 }
@@ -168,14 +168,14 @@ void PositionRange(){
                             tempend = tempend + xEle*yEle;
                             five = 1;
                         }
-                    }if( j == dconductors[i].size()-1){
+                    }if( j == static_cast<int>(dconductors[i].size())-1){
                             insert = MAXNUM;
                             if(five == 1){
                                 insert = tempend  + 1;
                             }if(inverse_i!=0 && five == 5){
-                                for(int k = 0 ; k < mrange[inverse_i-1].size();k++){
-                                    if(mrange[inverse_i-1][k].layerid == layerid && 
-                                    mrange[inverse_i-1][k].conductorid == conductorid){
+                                for(int k = 0 ; k < static_cast<int>(mrange[inverse_i-1].size());k++){
+                                    if(static_cast<size_t>(mrange[inverse_i-1][k].layerid) == layerid && 
+                                    static_cast<size_t>(mrange[inverse_i-1][k].conductorid) == conductorid){
                                         insert = mrange[inverse_i-1][k].insert;
                                     }
                                 }
@@ -187,12 +187,12 @@ void PositionRange(){
                 }	
             }
             tempstart = tempend + 1;
-            for( int j = 0 ; j < dblocks[i].size(); j++){
+            for( int j = 0 ; j < static_cast<int>(dblocks[i].size()); j++){
                 tlayerid = dblocks[i][j].windows.layerid;
                 tconductorid = dblocks[i][j].windows.conductorid;
                 xEle = dblocks[i][j].windows.xEle;
                 yEle = dblocks[i][j].windows.yEle;
-                if( inverse_i + 1 == tlayerid && tconductorid == MAXNUM){
+                if( static_cast<size_t>(inverse_i + 1) == tlayerid && tconductorid == MAXNUM){
                     tempend = tempend + xEle * yEle;
                 }
             }

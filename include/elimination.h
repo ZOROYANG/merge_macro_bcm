@@ -56,10 +56,10 @@ void InterfaceElimination(Matrix &matrixdown, Matrix &matrixup, int mi,double pd
     //std::cout << z4.col << " col z4 " << std::endl;
     lapack_int  g_indx[mi];
     lapack_int size_m = (lapack_int)mi;
-    lapack_int m = (lapack_int)mi;
-    lapack_int n = (lapack_int)(ma+mb);
+    //lapack_int m = (lapack_int)mi;
+    //lapack_int n = (lapack_int)(ma+mb);
     LAPACKE_dgetrf(LAPACK_ROW_MAJOR, size_m, size_m, z3.data[0], size_m, g_indx);
-    int INFO = LAPACKE_dgetrs(LAPACK_ROW_MAJOR, 'N', m, n, z3.data[0], m, g_indx, z4.data[0], n);
+//    int INFO = LAPACKE_dgetrs(LAPACK_ROW_MAJOR, 'N', m, n, z3.data[0], m, g_indx, z4.data[0], n);
 //	std::cout << " ma + mb " << ma + mb << endl;
 //	std::cout << " INFO  " << INFO << endl;
     cblas_dgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,ma+mb,ma+mb,mi,-1,z2.data[0],mi,z4.data[0],ma+mb,1,z1.data[0],ma+mb);

@@ -215,7 +215,7 @@ void printmotherele(const DPLANE &motherele){
 //	std::cout << " Mother  ele ..................i" << std::endl;
 //	printplane1(motherele.windows.vertex,4);
 //	std::cout << motherele.windows.xEle << " " << motherele.windows.yEle << std::endl;
-    for(int i = 0 ; i <motherele.pores.size();i++){
+    for(int i = 0 ; i <static_cast<int>(motherele.pores.size());i++){
 //		printplane(motherele.pores[i].vertex,4); 
     }
     //std::cout << " Mother  ele .......*****......i" << std::endl;
@@ -230,7 +230,8 @@ void boundaryInterface(DPLANE &plane,int index)
     guiInterEleNum=0;
     
     CPnt3d opnt1,opnt2;
-    double pa1,pa2,pb1,pb2;//pa1=Point A's coordinate1
+    //unused double pa1,pa2,pb1,pb2;//pa1=Point A's coordinate1
+    double pa1, pb1;
     const int iAxis1=1;		//iAxis1 is the axis which is vertical to the sweepline
     const int iAxis2=0;
     
@@ -276,7 +277,7 @@ void boundaryInterface(DPLANE &plane,int index)
     }
 
     //add the conductor's polygon's edges to the SweepLineLst
-    for(int i=0;i<plane.pores.size();i++)
+    for(int i=0;i<static_cast<int>(plane.pores.size());i++)
     {
         for(int j=0;j<vn;j++)
         {
@@ -320,7 +321,7 @@ void boundaryInterface(DPLANE &plane,int index)
     }
     std::vector<DPLANE> MotherElement; 
     oSlab.mvDelEdgeLst();
-    for(int i = 0 ; i <= plane.pores.size() ; i++){
+    for(int i = 0 ; i <= static_cast<int>(plane.pores.size()) ; i++){
         SlabElementLst *opgopSlabElementLst = &gopSlabElementLst[i];
         SlabElement *p1 = opgopSlabElementLst->moHead.mpNext;
         while (p1!=NULL){
@@ -353,7 +354,7 @@ void boundaryInterface(DPLANE &plane,int index)
         }	
     }
     //divide MotherElements;
-    for(int i = 0 ; i < MotherElement.size(); i++){
+    for(int i = 0 ; i < static_cast<int>(MotherElement.size()); i++){
         //printmotherele(MotherElement[i]);
         TPOINT p1 = MotherElement[i].windows.vertex[0];
         TPOINT p2 = MotherElement[i].windows.vertex[1];

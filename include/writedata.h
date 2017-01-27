@@ -23,18 +23,18 @@ void write_txt(){
     
         fid << "one time " << std::endl;	
         if(standard_v || standard_h){
-        for(int j=0;j<_two_axis.size();j++){
+        for(int j=0;j<static_cast<int>(_two_axis.size());j++){
             fid << _two_axis[j] << " ";
                 //fid.write((char*)(&_two_axis[j]),sizeof(_two_axis[j]));
         }
         fid << " axis size" << _two_axis.size() << std::endl;
         fid << endl;
-        for(int i = 0 ; i <  _two_diag.size(); i++){
+        for(int i = 0 ; i <static_cast<int>(_two_diag.size()); i++){
             fid << _two_diag[i] << std::endl;
         //	fid.write((char*)(&_two_diag[i]),sizeof(_two_diag[i]));
         }
         fid << "pdf size" << _pdf.size() << std::endl;
-        for(int k=0;k<_pdf.size();k++)
+        for(int k=0;k<static_cast<int>(_pdf.size());k++)
             fid << _pdf[k] << " " ;
         fid.close();	
         for(int j=0;j<boundary_position.row;j++){
@@ -63,49 +63,49 @@ void write_txt(){
         fid << blocks.size() << std::endl;
         fid << matrixbcm.row << std::endl;
 
-        for(int i = 0 ; i < _length.size() ;i++){
+        for(int i = 0 ; i < static_cast<int>(_length.size()) ;i++){
             fid << _length[i] << " " ;
         }
         fid << std::endl;		
-        for(int i = 0 ; i < ele_x.size(); i++){
+        for(int i = 0 ; i < static_cast<int>(ele_x.size()); i++){
             size_t x = size_t(ele_x[i]);
             fid << x << " " ;
             //fid.write((char*)(&x),sizeof(x));
         }
         fid << std::endl;
-        for(int i = 0 ; i < ele_y.size(); i++){
+        for(int i = 0 ; i < static_cast<int>(ele_y.size()); i++){
             size_t y = size_t(ele_y[i]);
             fid << y << " " ;
             //fid.write((char*)(&y),sizeof(y));
         }
         fid << std::endl;
-        for(int i = 0 ; i < ele_z.size(); i++){
+        for(int i = 0 ; i < static_cast<int>(ele_z.size()); i++){
             size_t z = size_t(ele_z[i]);
             fid << z << " " ;
             //fid.write((char*)(&z),sizeof(z));
         }
         fid << std::endl;
 
-        for(int i = 0 ; i < high.size() ; i++){
+        for(int i = 0 ; i < static_cast<int>(high.size()) ; i++){
             fid << high[i] <<" " ;
         }
         fid << std::endl;		
-        for(int i = 0 ; i< segments_x.size(); i++){
-            for(int j = 0 ; j < segments_x[i].size(); j++){
+        for(int i = 0 ; i< static_cast<int>(segments_x.size()); i++){
+            for(int j = 0 ; j < static_cast<int>(segments_x[i].size()); j++){
                 fid << segments_x[i][j] << " " ;
                 //fid.write((char*)(&segments_x[i][j]),sizeof(segments_x[i][j]));
             }
             fid << std::endl;
         }
-        for(int i = 0 ; i< segments_y.size(); i++){
-            for(int j = 0 ; j < segments_y[i].size(); j++){
+        for(int i = 0 ; i< static_cast<int>(segments_y.size()); i++){
+            for(int j = 0 ; j < static_cast<int>(segments_y[i].size()); j++){
                 fid << segments_y[i][j] << " " ;
                 //fid.write((char*)(&segments_y[i][j]),sizeof(segments_y[i][j]));
             }
             fid << std::endl;
         }
-        for(int i = 0 ; i< segments_z.size() ; i++){
-            for(int j = 0 ; j < segments_z[i].size(); j++){
+        for(int i = 0 ; i< static_cast<int>(segments_z.size()) ; i++){
+            for(int j = 0 ; j < static_cast<int>(segments_z[i].size()); j++){
                 fid << segments_z[i][j] << " " ;
                 //fid.write((char*)(&segments_z[i][j]),sizeof(segments_z[i][j]));
             }
@@ -113,19 +113,19 @@ void write_txt(){
         }
         
         for(int i = 0 ; i < 3 ; i++){
-            for(int j = 0 ; j < segments[i].size(); j++)
+            for(int j = 0 ; j < static_cast<int>(segments[i].size()); j++)
                 fid << segments[i][j] << " ";
                 fid<< std::endl;
         }
 
-        for(int i = 0 ; i < Areas.size() ;i++){
-            for( int j = 0 ; j < Areas[i].size() ;j++){
+        for(int i = 0 ; i < static_cast<int>(Areas.size()) ;i++){
+            for( int j = 0 ; j < static_cast<int>(Areas[i].size()) ;j++){
                 fid << Areas[i][j] << " " ;
             }
             fid << std::endl;
         }
         
-        for(int i = 0; i < condp.size(); i++)
+        for(int i = 0; i < static_cast<int>(condp.size()); i++)
             fid << condp[i] << " condp  " ;
             fid << std::endl;
     
@@ -185,45 +185,45 @@ void write_binary(){
         fid.write((char*)(&cn),sizeof(cn));
         size_t dimen = size_t(matrixbcm.row);
         fid.write((char*)(&dimen),sizeof(dimen));
-        for(int i = 0 ; i < ele_x.size(); i++){
+        for(int i = 0 ; i < static_cast<int>(ele_x.size()); i++){
             size_t x = size_t(ele_x[i]);
             fid.write((char*)(&x),sizeof(x));
         }
-        for(int i = 0 ; i < ele_y.size(); i++){
+        for(int i = 0 ; i < static_cast<int>(ele_y.size()); i++){
             size_t y = size_t(ele_y[i]);
             fid.write((char*)(&y),sizeof(y));
         }
-        for(int i = 0 ; i < ele_z.size(); i++){
+        for(int i = 0 ; i < static_cast<int>(ele_z.size()); i++){
             size_t z = size_t(ele_z[i]);
             fid.write((char*)(&z),sizeof(z));
         }
-        for(int i =0 ; i < _length.size(); i++){
+        for(int i =0 ; i < static_cast<int>(_length.size()); i++){
             fid.write((char*)(&_length[i]),sizeof(_length[i]));
         }	
-        for(int i = 0 ; i < Areas.size() ;i++){
-            for( int j = 0 ; j < Areas[i].size() ;j++){
+        for(int i = 0 ; i < static_cast<int>(Areas.size()) ;i++){
+            for( int j = 0 ; j < static_cast<int>(Areas[i].size()) ;j++){
                 fid.write((char*)(&Areas[i][j]),sizeof(Areas[i][j]));
             }
         }
-        for(int i = 0 ; i < high.size() ; i++){
+        for(int i = 0 ; i < static_cast<int>(high.size()) ; i++){
             fid.write((char*)(&high[i]), sizeof(high[i]));
         }
         for(int i = 0 ; i< block_number ; i++){
-            for(int j = 0 ; j < segments_x[i].size(); j++){
+            for(int j = 0 ; j < static_cast<int>(segments_x[i].size()); j++){
                 fid.write((char*)(&segments_x[i][j]),sizeof(segments_x[i][j]));
             }
         }
         for(int i = 0 ; i< block_number ; i++){
-            for(int j = 0 ; j < segments_y[i].size(); j++){
+            for(int j = 0 ; j < static_cast<int>(segments_y[i].size()); j++){
                 fid.write((char*)(&segments_y[i][j]),sizeof(segments_y[i][j]));
             }
         }
         for(int i = 0 ; i< block_number ; i++){
-            for(int j = 0 ; j < segments_z[i].size(); j++){
+            for(int j = 0 ; j < static_cast<int>(segments_z[i].size()); j++){
                 fid.write((char*)(&segments_z[i][j]),sizeof(segments_z[i][j]));
             }
         }
-        for(int i = 0 ; i < condp.size(); i++){
+        for(int i = 0 ; i < static_cast<int>(condp.size()); i++){
             size_t cp = size_t(condp[i]);
             fid.write((char*)(&cp),sizeof(cp));
         }
@@ -232,7 +232,7 @@ void write_binary(){
                 fid.write((char*)(&boundary_position.data[j][k]),sizeof(boundary_position.data[j][k]));
             }
         }
-        for(int j = 0 ; j < diag.size(); j++){
+        for(int j = 0 ; j < static_cast<int>(diag.size()); j++){
             fid.write((char*)(&diag[j]),sizeof(diag[j]));
         }
         for(int j=0;j<matrixbcm.row;j++){
@@ -280,17 +280,17 @@ void write_binary(){
         if(!fid){
             exit(1);
         }
-        for(int j=0;j<_two_axis.size();j++){
+        for(int j=0;j<static_cast<int>(_two_axis.size());j++){
                 fid.write((char*)(&_two_axis[j]),sizeof(_two_axis[j]));
         }
         fid.close();
         ofstream fid1(path_diag.c_str(),ios::binary);
-        for(int i = 0 ; i <  _two_diag.size(); i++){
+        for(int i = 0 ; i <  static_cast<int>(_two_diag.size()); i++){
             fid1.write((char*)(&_two_diag[i]),sizeof(_two_diag[i]));
         }
         fid1.close();
         ofstream fid2(path.c_str(),ios::binary);
-        for(int k=0;k<_pdf.size();k++)
+        for(int k=0;k<static_cast<int>(_pdf.size());k++)
             fid2.write((char*)(&_pdf[k]),sizeof(_pdf[k]));
         fid2.close();
         }			
@@ -405,7 +405,7 @@ void write_res2(){
     }
     //write to file
     double tmp_sum=0.0, tmp_sum1=0.0;
-    for(int i=0;i<Curmed;i++){
+    for(int i=0;i<static_cast<int>(Curmed);i++){
         int tlen;
         if(i==0)
             tlen=0;
@@ -439,7 +439,7 @@ void write_res2(){
         exit(1);
     }
     int tlen=0;
-    for(int i=0;i<Curmed;i++){
+    for(int i=0;i<static_cast<int>(Curmed);i++){
         for(int j=0;j<=range_id[i];j++){
             fprintf(fp1, "id=%d begin=%d(%d) end=%d(%d)\n sum=%d\n", j, prange[i][j].begin+tlen, prange[i][j].begin, prange[i][j].end+tlen, prange[i][j].end, prange[i][j].end-prange[i][j].begin);
         }
@@ -509,7 +509,7 @@ void save_ele(int bid){
                                 gBdElements[bid][i].leftup.x, gBdElements[bid][i].leftup.y, gBdElements[bid][i].leftup.z,
                                     gBdElements[bid][i].cfg.x, gBdElements[bid][i].cfg.y, gBdElements[bid][i].cfg.z);
     }
-    if(Curmed==1 || Curmed == 2 && bid == pointInMediumId)
+    if(Curmed==1 || (Curmed == 2 && bid == pointInMediumId))
         fprintf(fp, "cfg(%lf, %lf, %lf)\n", 
                     gBdElements[bid][cur_ele_id[bid]].cfg.x, gBdElements[bid][cur_ele_id[bid]].cfg.y, gBdElements[bid][cur_ele_id[bid]].cfg.z);
     fclose(fp);

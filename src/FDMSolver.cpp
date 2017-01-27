@@ -513,7 +513,7 @@ void FDM_Solver::solve(){
         printf("just Push_back...\n");
         vector<double> ii;
         for (int i=0; i<1024; ++i) {
-            printf("%u\n", ii.size());
+            printf("%lu\n", ii.size());
             ii.push_back(0);
         }
         //ssss::x.i.push_back(1);
@@ -543,23 +543,23 @@ void FDM_Solver::solve(){
         this->debg.Vec_Mtx_print(c21, "C21.txt");
         this->debg.Vec_Mtx_print(c22, "C22.txt");
         
-        for(int j = 0; j < c11.size(); ++ j){
+        for(int j = 0; j < static_cast<int>(c11.size()); ++ j){
             std::vector<double> rvec;
-            for(int i = 0; i < c11[j].size(); ++ i){
+            for(int i = 0; i < static_cast<int>(c11[j].size()); ++ i){
                 rvec.push_back(c11[j][i]);
             }
-            for(int i = 0; i < c12[j].size(); ++ i){
+            for(int i = 0; i < static_cast<int>(c12[j].size()); ++ i){
                 rvec.push_back(c12[j][i]);
             }
             Cap.push_back(rvec);
         }
         
-        for(int j = 0; j < c21.size(); ++ j){
+        for(int j = 0; j < static_cast<int>(c21.size()); ++ j){
             std::vector<double> rvec;
-            for(int i = 0; i < c21[j].size(); ++ i){
+            for(int i = 0; i < static_cast<int>(c21[j].size()); ++ i){
                 rvec.push_back(c21[j][i]);
             }
-            for(int i = 0; i < c22[j].size(); ++ i){
+            for(int i = 0; i < static_cast<int>(c22[j].size()); ++ i){
                 rvec.push_back(c22[j][i]);
             }
             Cap.push_back(rvec);
@@ -576,8 +576,8 @@ void FDM_Solver::solve(){
 		exit(1);
 	}
 	
-	for(int u = 0; u < Cap.size(); ++ u){
-		for(int v = 0; v < Cap[u].size(); ++ v){
+	for(int u = 0; u < static_cast<int>(Cap.size()); ++ u){
+		for(int v = 0; v < static_cast<int>(Cap[u].size()); ++ v){
 			fprintf(output, "%10f ", Cap[u][v]);
 		}
 		fprintf(output, ";\n");
@@ -927,7 +927,7 @@ void FDM_Solver::nonuniform(){
         rawGridX.push_back(macro_conf->cond_ori[i][0] + macro_conf->cond_len[i][0]);
     }
     sort(rawGridX.begin(), rawGridX.end());
-    for(int i = 0; i < rawGridX.size() - 1; ++ i){
+    for(int i = 0; i < static_cast<int>(rawGridX.size()) - 1; ++ i){
         if(fabs(rawGridX[i] - rawGridX[i + 1]) > (stepX * precision)){
             gridX.push_back(rawGridX[i]);
         }
@@ -947,7 +947,7 @@ void FDM_Solver::nonuniform(){
         rawGridY.push_back(macro_conf->cond_ori[i][1] + macro_conf->cond_len[i][1]);
     }
     sort(rawGridY.begin(), rawGridY.end());
-    for(int i = 0; i < rawGridY.size() - 1; ++ i){
+    for(int i = 0; i < static_cast<int>(rawGridY.size()) - 1; ++ i){
         if(fabs(rawGridY[i] - rawGridY[i + 1]) > (stepY * precision)){
             gridY.push_back(rawGridY[i]);
         }
@@ -967,12 +967,12 @@ void FDM_Solver::nonuniform(){
         rawGridZ.push_back(macro_conf->cond_ori[i][2] + macro_conf->cond_len[i][2]);
     }
     sort(rawGridZ.begin(), rawGridZ.end());
-    for(int i = 0; i < rawGridZ.size() - 1; ++ i){
+    for(int i = 0; i < static_cast<int>(rawGridZ.size()) - 1; ++ i){
         if(fabs(rawGridZ[i] - rawGridZ[i + 1]) > (stepZ * precision)){
             gridZ.push_back(rawGridZ[i]);
         }
     }
-    gridZ.push_back(rawGridZ[rawGridZ.size() - 1]);
+    gridZ.push_back(rawGridZ[static_cast<int>(rawGridZ.size()) - 1]);
     
     // total macro boudary grid ?
     brnk = 2 * ((gridX.size() - 1) * (gridY.size() - 1)
@@ -985,34 +985,34 @@ void FDM_Solver::nonuniform(){
     int idx  = 0;
     for(int i = 0; i < macro_conf->getNumCond(); ++ i){
         int itr = 0;
-        while(itr < gridX.size() && gridX[itr] < macro_conf->cond_ori[i][0]){
+        while(itr < static_cast<int>(gridX.size()) && gridX[itr] < macro_conf->cond_ori[i][0]){
             ++ itr;
         }
         int startX = itr;
         // take care '<' instead of '<='
-        while(itr < gridX.size() && gridX[itr] < macro_conf->cond_ori[i][0] + macro_conf->cond_len[i][0]){
+        while(itr < static_cast<int>(gridX.size()) && gridX[itr] < macro_conf->cond_ori[i][0] + macro_conf->cond_len[i][0]){
             ++ itr;
         }
         int endX = itr;
         
         itr = 0;
-        while(itr < gridY.size() && gridY[itr] < macro_conf->cond_ori[i][1]){
+        while(itr < static_cast<int>(gridY.size()) && gridY[itr] < macro_conf->cond_ori[i][1]){
             ++ itr;
         }
         int startY = itr;
         // take care '<' instead of '<='
-        while(itr < gridY.size() && gridY[itr] < macro_conf->cond_ori[i][1] + macro_conf->cond_len[i][1]){
+        while(itr < static_cast<int>(gridY.size()) && gridY[itr] < macro_conf->cond_ori[i][1] + macro_conf->cond_len[i][1]){
             ++ itr;
         }
         int endY = itr;
         
         itr = 0;
-        while(itr < gridZ.size() && gridZ[itr] < macro_conf->cond_ori[i][2]){
+        while(itr < static_cast<int>(gridZ.size()) && gridZ[itr] < macro_conf->cond_ori[i][2]){
             ++ itr;
         }
         int startZ = itr;
         // take care '<' instead of '<='
-        while(itr < gridZ.size() && gridZ[itr] < macro_conf->cond_ori[i][2] + macro_conf->cond_len[i][2]){
+        while(itr < static_cast<int>(gridZ.size()) && gridZ[itr] < macro_conf->cond_ori[i][2] + macro_conf->cond_len[i][2]){
             ++ itr;
         }
         int endZ = itr;
@@ -1099,8 +1099,8 @@ void FDM_Solver::nonuniform(){
     
     // order those on the surface of macro
     // bottom
-    for(int j = 0; j < gridY.size() - 1; ++ j){
-        for(int i = 0; i < gridX.size() - 1; ++ i){
+    for(int j = 0; j < static_cast<int>(gridY.size()) - 1; ++ j){
+        for(int i = 0; i < static_cast<int>(gridX.size()) - 1; ++ i){
             TPOINT tp;
             tp.x = (gridX[i] + gridX[i + 1]) / 2;
             tp.y = (gridY[j] + gridY[j + 1]) / 2;
@@ -1112,8 +1112,8 @@ void FDM_Solver::nonuniform(){
     }
 
     // left
-    for(int k = 0; k < gridZ.size() - 1; ++ k){
-        for(int j = gridY.size() - 2; j >= 0; -- j){
+    for(int k = 0; k < static_cast<int>(gridZ.size()) - 1; ++ k){
+        for(int j = static_cast<int>(gridY.size()) - 2; j >= 0; -- j){
             TPOINT tp;
             tp.x = gridX[0];
             tp.y = (gridY[j] + gridY[j + 1]) / 2;
@@ -1125,8 +1125,8 @@ void FDM_Solver::nonuniform(){
     }
 
     // front
-    for(int k = 0; k < gridZ.size() - 1; ++ k){
-        for(int i = 0; i < gridX.size() - 1; ++ i){
+    for(int k = 0; k < static_cast<int>(gridZ.size()) - 1; ++ k){
+        for(int i = 0; i < static_cast<int>(gridX.size()) - 1; ++ i){
             TPOINT tp;
             tp.x = (gridX[i] + gridX[i + 1]) / 2;
             tp.y = gridY[0];
@@ -1138,8 +1138,8 @@ void FDM_Solver::nonuniform(){
     }
 
     // right
-    for(int k = 0; k < gridZ.size() - 1; ++ k){
-        for(int j = 0; j < gridY.size() - 1; ++ j){
+    for(int k = 0; k < static_cast<int>(gridZ.size()) - 1; ++ k){
+        for(int j = 0; j < static_cast<int>(gridY.size()) - 1; ++ j){
             TPOINT tp;
             tp.x = gridX[gridX.size() - 1];
             tp.y = (gridY[j] + gridY[j + 1]) / 2;
@@ -1151,8 +1151,8 @@ void FDM_Solver::nonuniform(){
     }
 
     // back
-    for(int k = 0; k < gridZ.size() - 1; ++ k){
-        for(int i = gridX.size() - 2; i >= 0; -- i){
+    for(int k = 0; k < static_cast<int>(gridZ.size()) - 1; ++ k){
+        for(int i = static_cast<int>(gridX.size()) - 2; i >= 0; -- i){
             TPOINT tp;
             tp.x = (gridX[i] + gridX[i + 1]) / 2;
             tp.y = gridY[gridY.size() - 1];
@@ -1164,8 +1164,8 @@ void FDM_Solver::nonuniform(){
     }
 
     // top
-    for(int j = 0; j < gridY.size() - 1; ++ j){
-        for(int i = 0; i < gridX.size() - 1; ++ i){
+    for(int j = 0; j < static_cast<int>(gridY.size()) - 1; ++ j){
+        for(int i = 0; i < static_cast<int>(gridX.size()) - 1; ++ i){
             TPOINT tp;
             tp.x = (gridX[i] + gridX[i + 1]) / 2;
             tp.y = (gridY[j] + gridY[j + 1]) / 2;
@@ -1176,9 +1176,9 @@ void FDM_Solver::nonuniform(){
         }
     }
     
-    for(int k = 0; k < gridZ.size() - 1; ++ k){
-        for(int j = 0; j < gridY.size() - 1; ++ j){
-            for(int i = 0; i < gridX.size() - 1; ++ i){
+    for(int k = 0; k < static_cast<int>(gridZ.size()) - 1; ++ k){
+        for(int j = 0; j < static_cast<int>(gridY.size()) - 1; ++ j){
+            for(int i = 0; i < static_cast<int>(gridX.size()) - 1; ++ i){
                 TPOINT tp;
                 tp.x = (gridX[i] + gridX[i + 1]) / 2;
                 tp.y = (gridY[j] + gridY[j + 1]) / 2;
@@ -1201,10 +1201,10 @@ void FDM_Solver::nonuniform(){
     
     // the elements position in 3 Dimension
     eleX.push_back(gridX[0]);
-    for(int i = 1; i < gridX.size(); ++ i){
+    for(int i = 1; i < static_cast<int>(gridX.size()); ++ i){
         eleX.push_back((gridX[i] + gridX[i - 1]) / 2);
         
-        if(i + 1 == gridX.size()){
+        if(i + 1 == static_cast<int>(gridX.size())){
             break;
         }
         for(int j = 0; j < macro_conf->getNumCond(); ++ j){
@@ -1217,10 +1217,10 @@ void FDM_Solver::nonuniform(){
     eleX.push_back(gridX[gridX.size() - 1]);
     
     eleY.push_back(gridY[0]);
-    for(int i = 1; i < gridY.size(); ++ i){
+    for(int i = 1; i < static_cast<int>(gridY.size()); ++ i){
         eleY.push_back((gridY[i] + gridY[i - 1]) / 2);
         
-        if(i + 1 == gridY.size()){
+        if(i + 1 == static_cast<int>(gridY.size())){
             break;
         }
         for(int j = 0; j < macro_conf->getNumCond(); ++ j){
@@ -1233,10 +1233,10 @@ void FDM_Solver::nonuniform(){
     eleY.push_back(gridY[gridY.size() - 1]);
     
     eleZ.push_back(gridZ[0]);
-    for(int i = 1; i < gridZ.size(); ++ i){
+    for(int i = 1; i < static_cast<int>(gridZ.size()); ++ i){
         eleZ.push_back((gridZ[i] + gridZ[i - 1]) / 2);
         
-        if(i + 1 == gridZ.size()){
+        if(i + 1 == static_cast<int>(gridZ.size())){
             break;
         }
         for(int j = 0; j < macro_conf->getNumCond(); ++ j){
@@ -1266,7 +1266,7 @@ void FDM_Solver::nonuniform(){
     
     printf("have a try\n");
     
-    printf("%d\n", A11.i.size());
+    printf("%lu\n", A11.i.size());
     //solve();
     printf("Well\n");
     
@@ -1306,9 +1306,9 @@ void FDM_Solver::Construct_Matrix_A11_A12_A13_nuf(){
         TPOINT tp = i2p[j];
         
         // X dimension
-        for(int i = 0; i < eleX.size(); ++ i){
+        for(int i = 0; i < static_cast<int>(eleX.size()); ++ i){
             if(fabs(tp.x - eleX[i]) < (stepX * precision)){
-                if(i + 2 < eleX.size() && i > 1){
+                if(i + 2 < static_cast<int>(eleX.size()) && i > 1){
                     if(isInsideCond(eleX[i - 1], tp.y, tp.z)){
                         TPOINT tp1 = tp;
                         int m = i;
@@ -1434,9 +1434,9 @@ void FDM_Solver::Construct_Matrix_A11_A12_A13_nuf(){
         
         
         // Y dimension
-        for(int i = 0; i < eleY.size(); ++ i){
+        for(int i = 0; i < static_cast<int>(eleY.size()); ++ i){
             if(fabs(tp.y - eleY[i]) < (stepY * precision)){
-                if(i + 2 < eleY.size() && i > 1){
+                if(i + 2 < static_cast<int>(eleY.size()) && i > 1){
                     if(isInsideCond(tp.x, eleY[i - 1], tp.z)){
                         TPOINT tp1 = tp;
                         int m = i;
@@ -1561,9 +1561,9 @@ void FDM_Solver::Construct_Matrix_A11_A12_A13_nuf(){
         
    
         // Z dimension
-        for(int i = 0; i < eleZ.size(); ++ i){
+        for(int i = 0; i < static_cast<int>(eleZ.size()); ++ i){
             if(fabs(tp.z - eleZ[i]) < (stepZ * precision)){
-                if(i + 2 < eleZ.size() && i > 1){
+                if(i + 2 < static_cast<int>(eleZ.size()) && i > 1){
                     if(isInsideCond(tp.x, tp.y, eleZ[i - 1])){
                         TPOINT tp1 = tp;
                         int m = i;
@@ -2228,7 +2228,7 @@ void FDM_Solver::Construct_Matrix_A31_A32_A33_nuf(){
         TPOINT tp = i2p[j];
         
         // X dimension
-        for(int i = 0; i < eleX.size(); ++ i){
+        for(int i = 0; i < static_cast<int>(eleX.size()); ++ i){
             if(fabs(tp.x - eleX[i]) < (stepX * precision)){
                 TPOINT tp1 = tp;
                 int m = i;
@@ -2293,7 +2293,7 @@ void FDM_Solver::Construct_Matrix_A31_A32_A33_nuf(){
         }
         
         // Y dimension
-        for(int i = 0; i < eleY.size(); ++ i){
+        for(int i = 0; i < static_cast<int>(eleY.size()); ++ i){
             if(fabs(tp.y - eleY[i]) < (stepY * precision)){
                 TPOINT tp1 = tp;
                 int m = i;
@@ -2358,7 +2358,7 @@ void FDM_Solver::Construct_Matrix_A31_A32_A33_nuf(){
         }
         
         // Z dimension
-        for(int i = 0; i < eleZ.size(); ++ i){
+        for(int i = 0; i < static_cast<int>(eleZ.size()); ++ i){
             if(fabs(tp.z - eleZ[i]) < (stepZ * precision)){
                 TPOINT tp1 = tp;
                 int m = i;
@@ -2499,40 +2499,40 @@ std::vector<std::vector<double> > FDM_Solver::convert2Matrix(cs_di cd){
 void FDM_Solver::cmprsBoundary(){
     // checking index for compress, also can be used as a mask table
     std::vector<int> cmp_idx;
-    for(int i = 0; i < Cap.size(); ++ i){
+    for(int i = 0; i < static_cast<int>(Cap.size()); ++ i){
         cmp_idx.push_back(i);
     }
     
     std::vector<int> Xsplit;
-    for(int i = 0; i < gridX.size(); ++ i){
+    for(int i = 0; i < static_cast<int>(gridX.size()); ++ i){
         if(fabs(gridX[i] - round(gridX[i] / stepX) * stepX) > precision * stepX){
             Xsplit.push_back(i);
         }
     }
     
     std::vector<int> Ysplit;
-    for(int i = 0; i < gridY.size(); ++ i){
+    for(int i = 0; i < static_cast<int>(gridY.size()); ++ i){
         if(fabs(gridY[i] - round(gridY[i] / stepY) * stepY) > precision * stepY){
             Ysplit.push_back(i);
         }
     }
     
     std::vector<int> Zsplit;
-    for(int i = 0; i < gridZ.size(); ++ i){
+    for(int i = 0; i < static_cast<int>(gridZ.size()); ++ i){
         if(fabs(gridZ[i] - round(gridZ[i] / stepZ) * stepZ) > precision * stepZ){
             Zsplit.push_back(i);
         }
     }
     
     printf("x\nXsp size(): %lu\nYsp size(): %lu\nZsp size(): %lu\n", Xsplit.size(), Ysplit.size(), Zsplit.size());
-    for(int i = 0; i < Xsplit.size(); ++ i){
+    for(int i = 0; i < static_cast<int>(Xsplit.size()); ++ i){
         printf("%lf ", gridX[Xsplit[i]]);
     }
     printf("\n");
     
     // X combine, fixed Y
-    for(int j = 0; j < Xsplit.size(); ++ j){
-        for(int i = 0; i < gridZ.size() - 1; ++ i){
+    for(int j = 0; j < static_cast<int>(Xsplit.size()); ++ j){
+        for(int i = 0; i < static_cast<int>(gridZ.size()) - 1; ++ i){
             TPOINT tpd;
             tpd.x = (gridX[Xsplit[j]] + gridX[Xsplit[j] - 1]) / 2;
             tpd.y = gridY[0];
@@ -2550,11 +2550,11 @@ void FDM_Solver::cmprsBoundary(){
             
             // merge & modify cmp_idx
             if(cmp_idx[rd] < cmp_idx[ru]){
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[rd][u] += Cap[ru][u];
                 }
                 
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[u][rd] += Cap[u][ru];
                 }
                 
@@ -2565,8 +2565,8 @@ void FDM_Solver::cmprsBoundary(){
         }
     }
     
-    for(int j = 0; j < Xsplit.size(); ++ j){
-        for(int i = 0; i < gridZ.size() - 1; ++ i){
+    for(int j = 0; j < static_cast<int>(Xsplit.size()); ++ j){
+        for(int i = 0; i < static_cast<int>(gridZ.size()) - 1; ++ i){
             TPOINT tpd;
             tpd.x = (gridX[Xsplit[j]] + gridX[Xsplit[j] - 1]) / 2;
             tpd.y = gridY[gridY.size() - 1];
@@ -2584,11 +2584,11 @@ void FDM_Solver::cmprsBoundary(){
             
             // merge & modify cmp_idx
             if(cmp_idx[rd] < cmp_idx[ru]){
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[rd][u] += Cap[ru][u];
                 }
                 
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[u][rd] += Cap[u][ru];
                 }
                 
@@ -2600,8 +2600,8 @@ void FDM_Solver::cmprsBoundary(){
     }
     
     // X combine, fixed Z
-    for(int j = 0; j < Xsplit.size(); ++ j){
-        for(int i = 0; i < gridY.size() - 1; ++ i){
+    for(int j = 0; j < static_cast<int>(Xsplit.size()); ++ j){
+        for(int i = 0; i < static_cast<int>(gridY.size()) - 1; ++ i){
             TPOINT tpd;
             tpd.x = (gridX[Xsplit[j]] + gridX[Xsplit[j] - 1]) / 2;
             tpd.z = gridZ[0];
@@ -2618,12 +2618,12 @@ void FDM_Solver::cmprsBoundary(){
             }
             
             // merge & modify cmp_idx
-            if(cmp_idx[rd] < cmp_idx[ru]){
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+            if(cmp_idx[rd] < static_cast<int>(cmp_idx[ru])){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[rd][u] += Cap[ru][u];
                 }
                 
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[u][rd] += Cap[u][ru];
                 }
                 
@@ -2634,8 +2634,8 @@ void FDM_Solver::cmprsBoundary(){
         }
     }
     
-    for(int j = 0; j < Xsplit.size(); ++ j){
-        for(int i = 0; i < gridY.size() - 1; ++ i){
+    for(int j = 0; j < static_cast<int>(Xsplit.size()); ++ j){
+        for(int i = 0; i < static_cast<int>(gridY.size()) - 1; ++ i){
             TPOINT tpd;
             tpd.x = (gridX[Xsplit[j]] + gridX[Xsplit[j] - 1]) / 2;
             tpd.z = gridZ[gridZ.size() - 1];
@@ -2653,11 +2653,11 @@ void FDM_Solver::cmprsBoundary(){
             
             // merge & modify cmp_idx
             if(cmp_idx[rd] < cmp_idx[ru]){
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[rd][u] += Cap[ru][u];
                 }
                 
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[u][rd] += Cap[u][ru];
                 }
                 
@@ -2669,8 +2669,8 @@ void FDM_Solver::cmprsBoundary(){
     }
     
     // Y combine, fixed X
-    for(int j = 0; j < Ysplit.size(); ++ j){
-        for(int i = 0; i < gridZ.size() - 1; ++ i){
+    for(int j = 0; j < static_cast<int>(Ysplit.size()); ++ j){
+        for(int i = 0; i < static_cast<int>(gridZ.size()) - 1; ++ i){
             TPOINT tpd;
             tpd.y = (gridY[Ysplit[j]] + gridY[Ysplit[j] - 1]) / 2;
             tpd.x = gridX[0];
@@ -2688,11 +2688,11 @@ void FDM_Solver::cmprsBoundary(){
             
             // merge & modify cmp_idx
             if(cmp_idx[rd] < cmp_idx[ru]){
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[rd][u] += Cap[ru][u];
                 }
                 
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[u][rd] += Cap[u][ru];
                 }
                 
@@ -2703,8 +2703,8 @@ void FDM_Solver::cmprsBoundary(){
         }
     }
     
-    for(int j = 0; j < Ysplit.size(); ++ j){
-        for(int i = 0; i < gridZ.size() - 1; ++ i){
+    for(int j = 0; j < static_cast<int>(Ysplit.size()); ++ j){
+        for(int i = 0; i < static_cast<int>(gridZ.size()) - 1; ++ i){
             TPOINT tpd;
             tpd.y = (gridY[Ysplit[j]] + gridY[Ysplit[j] - 1]) / 2;
             tpd.x = gridX[gridX.size() - 1];
@@ -2722,11 +2722,11 @@ void FDM_Solver::cmprsBoundary(){
             
             // merge & modify cmp_idx
             if(cmp_idx[rd] < cmp_idx[ru]){
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[rd][u] += Cap[ru][u];
                 }
                 
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[u][rd] += Cap[u][ru];
                 }
                 
@@ -2739,8 +2739,8 @@ void FDM_Solver::cmprsBoundary(){
     
     printf("y\n");
     // Y combine, fixed Z
-    for(int j = 0; j < Ysplit.size(); ++ j){
-        for(int i = 0; i < gridX.size() - 1; ++ i){
+    for(int j = 0; j < static_cast<int>(Ysplit.size()); ++ j){
+        for(int i = 0; i < static_cast<int>(gridX.size()) - 1; ++ i){
             TPOINT tpd;
             tpd.y = (gridY[Ysplit[j]] + gridY[Ysplit[j] - 1]) / 2;
             tpd.z = gridZ[0];
@@ -2758,11 +2758,11 @@ void FDM_Solver::cmprsBoundary(){
             
             // merge & modify cmp_idx
             if(cmp_idx[rd] < cmp_idx[ru]){
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[rd][u] += Cap[ru][u];
                 }
                 
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[u][rd] += Cap[u][ru];
                 }
                 
@@ -2773,8 +2773,8 @@ void FDM_Solver::cmprsBoundary(){
         }
     }
     
-    for(int j = 0; j < Ysplit.size(); ++ j){
-        for(int i = 0; i < gridX.size() - 1; ++ i){
+    for(int j = 0; j < static_cast<int>(Ysplit.size()); ++ j){
+        for(int i = 0; i < static_cast<int>(gridX.size()) - 1; ++ i){
             TPOINT tpd;
             tpd.y = (gridY[Ysplit[j]] + gridY[Ysplit[j] - 1]) / 2;
             tpd.z = gridZ[gridZ.size() - 1];
@@ -2792,11 +2792,11 @@ void FDM_Solver::cmprsBoundary(){
             
             // merge & modify cmp_idx
             if(cmp_idx[rd] < cmp_idx[ru]){
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[rd][u] += Cap[ru][u];
                 }
                 
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[u][rd] += Cap[u][ru];
                 }
                 
@@ -2809,8 +2809,8 @@ void FDM_Solver::cmprsBoundary(){
     
     printf("z\n");
     // Z combine, fixed X
-    for(int j = 0; j < Zsplit.size(); ++ j){
-        for(int i = 0; i < gridY.size() - 1; ++ i){
+    for(int j = 0; j < static_cast<int>(Zsplit.size()); ++ j){
+        for(int i = 0; i < static_cast<int>(gridY.size()) - 1; ++ i){
             TPOINT tpd;
             tpd.z = (gridZ[Zsplit[j]] + gridZ[Zsplit[j] - 1]) / 2;
             tpd.x = gridX[0];
@@ -2828,11 +2828,11 @@ void FDM_Solver::cmprsBoundary(){
             
             // merge & modify cmp_idx
             if(cmp_idx[rd] < cmp_idx[ru]){
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[rd][u] += Cap[ru][u];
                 }
                 
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[u][rd] += Cap[u][ru];
                 }
                 
@@ -2843,8 +2843,8 @@ void FDM_Solver::cmprsBoundary(){
         }
     }
     
-    for(int j = 0; j < Zsplit.size(); ++ j){
-        for(int i = 0; i < gridY.size() - 1; ++ i){
+    for(int j = 0; j < static_cast<int>(Zsplit.size()); ++ j){
+        for(int i = 0; i < static_cast<int>(gridY.size()) - 1; ++ i){
             TPOINT tpd;
             tpd.z = (gridZ[Zsplit[j]] + gridZ[Zsplit[j] - 1]) / 2;
             tpd.x = gridX[gridX.size() - 1];
@@ -2862,11 +2862,11 @@ void FDM_Solver::cmprsBoundary(){
             
             // merge & modify cmp_idx
             if(cmp_idx[rd] < cmp_idx[ru]){
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[rd][u] += Cap[ru][u];
                 }
                 
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[u][rd] += Cap[u][ru];
                 }
                 
@@ -2878,8 +2878,8 @@ void FDM_Solver::cmprsBoundary(){
     }
     
     // Z combine, fixed Y
-    for(int j = 0; j < Zsplit.size(); ++ j){
-        for(int i = 0; i < gridX.size() - 1; ++ i){
+    for(int j = 0; j < static_cast<int>(Zsplit.size()); ++ j){
+        for(int i = 0; i < static_cast<int>(gridX.size()) - 1; ++ i){
             TPOINT tpd;
             tpd.z = (gridZ[Zsplit[j]] + gridZ[Zsplit[j] - 1]) / 2;
             tpd.y = gridY[0];
@@ -2897,11 +2897,11 @@ void FDM_Solver::cmprsBoundary(){
             
             // merge & modify cmp_idx
             if(cmp_idx[rd] < cmp_idx[ru]){
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[rd][u] += Cap[ru][u];
                 }
                 
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[u][rd] += Cap[u][ru];
                 }
                 
@@ -2912,8 +2912,8 @@ void FDM_Solver::cmprsBoundary(){
         }
     }
     
-    for(int j = 0; j < Zsplit.size(); ++ j){
-        for(int i = 0; i < gridX.size() - 1; ++ i){
+    for(int j = 0; j < static_cast<int>(Zsplit.size()); ++ j){
+        for(int i = 0; i < static_cast<int>(gridX.size()) - 1; ++ i){
             TPOINT tpd;
             tpd.z = (gridZ[Zsplit[j]] + gridZ[Zsplit[j] - 1]) / 2;
             tpd.y = gridY[gridY.size() - 1];
@@ -2931,11 +2931,11 @@ void FDM_Solver::cmprsBoundary(){
             
             // merge & modify cmp_idx
             if(cmp_idx[rd] < cmp_idx[ru]){
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[rd][u] += Cap[ru][u];
                 }
                 
-                for(int u = 0; u < Cap[rd].size(); ++ u){
+                for(int u = 0; u < static_cast<int>(Cap[rd].size()); ++ u){
                     Cap[u][rd] += Cap[u][ru];
                 }
                 
@@ -2948,12 +2948,12 @@ void FDM_Solver::cmprsBoundary(){
     
     std::vector<std::vector<double> > compressed;
     
-    for(int i = 0; i < Cap.size(); ++ i){
+    for(int i = 0; i < static_cast<int>(Cap.size()); ++ i){
         if(cmp_idx[i] != i){
             continue;
         }
         std::vector<double> rvec;
-        for(int j = 0; j < Cap[i].size(); ++ j){
+        for(int j = 0; j < static_cast<int>(Cap[i].size()); ++ j){
             if(cmp_idx[j] != j){
                 continue;
             }
@@ -2962,7 +2962,7 @@ void FDM_Solver::cmprsBoundary(){
         compressed.push_back(rvec);
     }
     
-    for(int i = 0; i < Cap.size(); ++ i){
+    for(int i = 0; i < static_cast<int>(Cap.size()); ++ i){
         Cap[i].clear();
     }
     Cap.clear();

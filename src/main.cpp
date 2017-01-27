@@ -59,8 +59,8 @@ int main(int  argc,char *argv[] )
     std::cout << "/   Boundary Capacitance Matrix Generating Program  /" << std::endl; 
     std::cout << "*****************************************************" << std::endl;
     int i;
-    float second;
-    struct tms  ti1,ti2;
+    //float second;
+    //struct tms  ti1,ti2;
     
     if(argc<2)
     {

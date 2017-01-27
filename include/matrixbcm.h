@@ -13,24 +13,24 @@
 */
 void MatrixGenBcm(){
     printf("\nbasic info:\nlength: %lf %lf %lf\n", _length[0], _length[1], _length[2]);
-    for(int i = 0; i < ele_x.size(); ++ i){
+    for(int i = 0; i < static_cast<int>(ele_x.size()); ++ i){
         printf("%d segs in x dir.: %d\n", i, ele_x[i]);
     }
-    for(int i = 0; i < ele_y.size(); ++ i){
+    for(int i = 0; i < static_cast<int>(ele_y.size()); ++ i){
         printf("%d segs in y dir.: %d\n", i, ele_y[i]);
     }
-    for(int i = 0; i < ele_z.size(); ++ i){
+    for(int i = 0; i < static_cast<int>(ele_z.size()); ++ i){
         printf("%d segs in z dir.: %d\n", i, ele_z[i]);
     }
     printf("Curmed: %d\n", Curmed);
-    for(int i = 0; i < Curmed; ++ i){
+    for(int i = 0; i < static_cast<int>(Curmed); ++ i){
         printf("tempelec: %lf", tempelec[i]);
     }
     printf("\n");
     
     printf("Areas:\n");
-    for(int i = 0; i < Areas.size(); ++ i){
-        for(int j = 0; j < Areas[i].size(); ++ j){
+    for(int i = 0; i < static_cast<int>(Areas.size()); ++ i){
+        for(int j = 0; j < static_cast<int>(Areas[i].size()); ++ j){
             printf("%lf ", Areas[i][j]);
         }
         printf("\n");
@@ -64,14 +64,14 @@ void MatrixGenBcm(){
                 printf("!!!begin passing matrix!!!\n");
                 std::vector<std::vector<double> > tempvec = fdmsp.getCap();
                 double** A = new double*[tempvec.size()];
-                for(int u = 0; u < tempvec.size(); ++ u){
+                for(int u = 0; u < static_cast<int>(tempvec.size()); ++ u){
                     A[u] = new double[tempvec[u].size()];
                     
                 }
                 printf("!!!finish allocation!!!\n");
                 
-                for(int u = 0; u < tempvec.size(); ++ u){
-                    for(int v = 0; v < tempvec[u].size(); ++ v){
+                for(int u = 0; u < static_cast<int>(tempvec.size()); ++ u){
+                    for(int v = 0; v < static_cast<int>(tempvec[u].size()); ++ v){
                         A[u][v] = tempvec[u][v];
                     }
                     
@@ -84,23 +84,23 @@ void MatrixGenBcm(){
             }
         }else{
             co = new double*[conductors.size()];
-            for(int i = 0; i < conductors.size(); ++ i){
+            for(int i = 0; i < static_cast<int>(conductors.size()); ++ i){
                 co[i] = new double[3];
             }
             
             cl = new double*[conductors.size()];
-            for(int i = 0; i < conductors.size(); ++ i){
+            for(int i = 0; i < static_cast<int>(conductors.size()); ++ i){
                 cl[i] = new double[3];
             }
             
             cs = new int*[conductors.size()];
-            for(int i = 0; i < conductors.size(); ++ i){
+            for(int i = 0; i < static_cast<int>(conductors.size()); ++ i){
                 cs[i] = new int[3];
             }
             
             int k = 0;
-            for(int i = 0; i < blocks.size(); ++ i){
-                for(int j = 0; j < conductors.size(); ++ j){
+            for(int i = 0; i < static_cast<int>(blocks.size()); ++ i){
+                for(int j = 0; j < static_cast<int>(conductors.size()); ++ j){
                     if(conductors[j].layerNum == i + 1){
                         cs[k][0] = conductors[j].xEle;
                         cs[k][1] = conductors[j].yEle;
@@ -133,14 +133,14 @@ void MatrixGenBcm(){
                 printf("!!!begin passing matrix!!!\n");
                 std::vector<std::vector<double> > tempvec = fdmsp.getCap();
                 double** A = new double*[tempvec.size()];
-                for(int u = 0; u < tempvec.size(); ++ u){
+                for(int u = 0; u < static_cast<int>(tempvec.size()); ++ u){
                     A[u] = new double[tempvec[u].size()];
                     
                 }
                 printf("!!!finish allocation!!!\n");
                 
-                for(int u = 0; u < tempvec.size(); ++ u){
-                    for(int v = 0; v < tempvec[u].size(); ++ v){
+                for(int u = 0; u < static_cast<int>(tempvec.size()); ++ u){
+                    for(int v = 0; v < static_cast<int>(tempvec[u].size()); ++ v){
                         A[u][v] = tempvec[u][v];
                     }
                     
@@ -152,7 +152,7 @@ void MatrixGenBcm(){
             }
             
             printf("!!!HI!!!\n");
-            for(int i = 0; i < conductors.size(); ++ i){
+            for(int i = 0; i < static_cast<int>(conductors.size()); ++ i){
                 delete[] cs[i];
                 delete[] cl[i];
                 delete[] co[i];
@@ -180,7 +180,7 @@ void MatrixGenBcm(){
     
     //must call this before use New_Integration
     gauss();
-    for(int i = 0  ; i < Curmed ; i++){
+    for(int i = 0  ; i < static_cast<int>(Curmed) ; i++){
         ntotal=cur_ele_id[i];
         matrix_G[i] = new double[ntotal*ntotal];
         matrix_H[i] = new double[ntotal*ntotal];
@@ -224,7 +224,7 @@ void MatrixGenBcm(){
         }
     }		
     matrix_w=new double *[Curmed];
-    for(int i=0;i<Curmed;i++){
+    for(int i=0;i<static_cast<int>(Curmed);i++){
         matrix_w[i]=new double[cur_ele_id[i]];
         for(int j=0;j<cur_ele_id[i];j++){
             matrix_w[i][j]=tempelec[i]*ele_coverbcm(i,j);
@@ -232,7 +232,7 @@ void MatrixGenBcm(){
     }
     //cout<<"Generating BCM for two mediums:"<<endl;
     matrix_A = new double**[Curmed];
-    for(int i=0;i<Curmed;i++){
+    for(int i=0;i<static_cast<int>(Curmed);i++){
         matrix_A[i] = new double*[cur_ele_id[i]];
         for(int j=0;j<cur_ele_id[i];j++)
             matrix_A[i][j]=new double[cur_ele_id[i]];
@@ -251,7 +251,7 @@ void MatrixGenBcm(){
         matrixbcm.col = cur_ele_id[0];
     }else{
         Matrix matrixup,matrixdown;
-        for (int i = 1  ; i < Curmed ; i++){
+        for (int i = 1  ; i < static_cast<int>(Curmed) ; i++){
             if(i > 1){
                 matrixdown.release();
                 matrixdown = matrixbcm;

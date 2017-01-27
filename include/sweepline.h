@@ -69,15 +69,17 @@ class PolyEdge // Edge of Poly
     PolyEdge(ushort ,CPnt3d ,CPnt3d );
     bool IsSameEdge(PolyEdge& pe)
     {
-    return (mNode1==pe.mNode1 && mNode2==pe.mNode2);
+        return (mNode1==pe.mNode1 && mNode2==pe.mNode2);
     }
     PolyEdge& operator= (PolyEdge& pe)
     {
-    mNode1=pe.mNode1;
-    mNode2=pe.mNode2;
-    musPolyNum=pe.musPolyNum;
-    mdPosition=pe.mdPosition;
-    mpNext=pe.mpNext;
+        mNode1=pe.mNode1;
+        mNode2=pe.mNode2;
+        musPolyNum=pe.musPolyNum;
+        mdPosition=pe.mdPosition;
+        mpNext=pe.mpNext;
+        
+        return *this;
     }
 
 

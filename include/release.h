@@ -32,7 +32,7 @@ void release_vector(){
     vector<BLOCKINFO>().swap(blocks);
     vector<CONDUCTORINFO>().swap(conductors);
 
-    for(int i=0;i<Curmed;i++){
+    for(int i=0;i<static_cast<int>(Curmed);i++){
         if(matrix_G[i]!=NULL){
             delete[] matrix_G[i];
         }
@@ -43,7 +43,7 @@ void release_vector(){
     delete[] matrix_G;
     delete[] matrix_H;	
         //for 2 mediums
-    for(int i=0;i<Curmed;i++){
+    for(int i=0;i<static_cast<int>(Curmed);i++){
         if(matrix_w[i]!=NULL)
             delete[] matrix_w[i];
         if(matrix_A[i]!=NULL){
@@ -54,7 +54,7 @@ void release_vector(){
             delete[] matrix_A[i];
         }
     }
-    for(int i = 0 ; i < Curmed + 1 ; i++){
+    for(int i = 0 ; i < static_cast<int>(Curmed) + 1 ; i++){
         if(g_indx[i] != NULL){
             delete [] g_indx[i];
         }
@@ -65,12 +65,13 @@ void release_vector(){
 }
 
 void release_mem(){
-    int j,k;
+    //int j,k;
+    int j;
     if(frw){
-        for(int i=0;i<Curmed;i++){
+        for(int i=0;i<static_cast<int>(Curmed);i++){
             if(gBdElements[i]!=NULL)
                 delete[] gBdElements[i];
-            if(Curmed == 1 || Curmed==2 && i==pointInMediumId){
+            if(Curmed == 1 || (Curmed==2 && i==pointInMediumId)){
                 if(vector_g[i]!=NULL)
                     delete[] vector_g[i];
                 if(vector_h[i]!=NULL)
@@ -91,7 +92,7 @@ void release_mem(){
         delete[] matrix_H;	
         //for 2 mediums
         if(Curmed == 2){
-            for(int i=0;i<Curmed;i++){
+            for(int i=0;i<static_cast<int>(Curmed);i++){
                 if(matrix_w[i]!=NULL)
                     delete[] matrix_w[i];
                 if(matrix_A[i]!=NULL){

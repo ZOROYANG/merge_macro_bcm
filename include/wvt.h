@@ -62,7 +62,7 @@ void wvt_solve(){
         //the real part 2 of formula 30
         final_wvt[i]=new double[interface_start_id[0] + interface_start_id[1]];
         int cnt=0;
-        for(int j=0;j<Curmed;j++){
+        for(int j=0;j<static_cast<int>(Curmed);j++){
             for(int k=0;k<interface_start_id[j];k++){
                 final_wvt[i][cnt+k] = 0.0;
                 for(int r=0;r<num_i;r++){

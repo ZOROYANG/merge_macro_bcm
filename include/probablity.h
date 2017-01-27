@@ -8,10 +8,10 @@ void deal_matrix(){
         
     int row = matrixbcm.row;
     int col = matrixbcm.col;
-    double positivesum = 0.0 ;
+    //double positivesum = 0.0 ;
     double rowsum = 0.0;
     int countpnum = 0;
-    double positiveave = 0.0 ;
+    //double positiveave = 0.0 ;
     double rowave = 0.0 ;
     for(int i = 0 ; i < row ; i++){
         for(int j = 0 ; j < col ; j++){
@@ -31,7 +31,7 @@ void deal_matrix(){
             }
         }
         rowsum = 0.0;
-        positivesum = 0.0;
+        //positivesum = 0.0;
         countpnum = 0;
     }
     std::cout<<"deal done !" << std::endl;

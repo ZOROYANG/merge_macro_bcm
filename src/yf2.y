@@ -461,7 +461,7 @@ MEDIUM_INTERFACEDEF:MEDIUM_INTERFACE POINT3D POINT3DMORE
 			if(frw){
 				pddlInterfacePoint3DNum = pddlPoint3DNum;
 				pddlInterfacePoint3DBuf = new TPOINT[pddlInterfacePoint3DNum];
-           			 for(int i = 0 ; i < pddlPoint3DNum ; i++) 
+           			 for(int i = 0 ; i < static_cast<int>(pddlPoint3DNum) ; i++) 
 					pddlInterfacePoint3DBuf[i] = pddlPoint3DBuf[i]; 
          				   pddlPoint3DNum = 0; 
 			}if(bcm){ // add by [zhangbl]
@@ -470,7 +470,7 @@ MEDIUM_INTERFACEDEF:MEDIUM_INTERFACE POINT3D POINT3DMORE
 				for (int i = 0 ; i < Curblk-1 ; i++){
 					pddlInterfacePoint3DBufMul[i] = new TPOINT [pddlInterfacePoint3DNum];
 				}
-				for ( int i = 0 ; i < pddlPoint3DNum ; i ++){
+				for ( int i = 0 ; i < static_cast<int>(pddlPoint3DNum) ; i ++){
 					pddlInterfacePoint3DBufMul[InterfaceNum][i]= pddlPoint3DBuf[i];
 					pddlPoint3DNum = 0 ;
 					 
@@ -548,7 +548,7 @@ OUTLOOPDEF:OUTLOOP OBJ VERTEXDEFS
 	   {
 		   pddlOutLoopPoint2DNum = pddlPoint2DNum;
 		   int i;
-		   for(i = 0 ; i < pddlPoint2DNum ; i++) 
+		   for(i = 0 ; i < static_cast<int>(pddlPoint2DNum) ; i++) 
 			  pddlOutLoopPoint2DBuf[i] = pddlPoint2DBuf[i]; 
 		   pddlPoint2DNum = 0; 
 	   }
@@ -557,7 +557,7 @@ OUTLOOPDEF:OUTLOOP OBJ VERTEXDEFS
 		//add by [whquan]
             pddlOutLoopPoint3DNum = pddlPoint3DNum;
 			int i;
-            for( i = 0 ; i < pddlPoint3DNum ; i++) 
+            for( i = 0 ; i < static_cast<int>(pddlPoint3DNum) ; i++) 
 				pddlOutLoopPoint3DBuf[i] = pddlPoint3DBuf[i]; 
             pddlPoint3DNum = 0; 
 	   };
@@ -709,7 +709,7 @@ int DoAlpha(ifstream *input)
 		return 300+i;
 	}
 
-   for(i=0;i<ObjNum;i++)
+   for(i=0;i<static_cast<int>(ObjNum);i++)
       if(strcmp(str,ObjField[i].Name)==0)
 	{
 		yylval.ival=i;

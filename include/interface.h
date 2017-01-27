@@ -10,7 +10,7 @@ void unify_interface_divide(){
         cout <<"error: two mediums, but no interface, exit...\n";
         exit(1);
     }
-    for(int i=0;i<Curmed;i++)
+    for(int i=0;i<static_cast<int>(Curmed);i++)
         interface_start_id[i]=cur_ele_id[i];
     //for 0
     for(int i=0; i<cur_poly_id; i++){
@@ -35,7 +35,7 @@ void unify_interface_divide(){
         gBdElements[0][cur_ele_id[0]].cfg=observePoint;
     save_ele(0);
     //for other
-    for(int i=1;i<Curmed;i++){
+    for(int i=1;i<static_cast<int>(Curmed);i++){
         for(int j=interface_start_id[0];j<cur_ele_id[0];j++){
             gBdElements[i][cur_ele_id[i]] = gBdElements[0][j];
             reverse_points(&gBdElements[i][cur_ele_id[i]]);
