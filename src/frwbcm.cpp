@@ -249,6 +249,7 @@ void generatebcm(){
         ModulatePosition();
         printf("!!!End ModulatePosition!!!\n");
     }
+    // need to Modulate
     //ModulateBCM();
     //deal_matrix();
 //	write_bcm();

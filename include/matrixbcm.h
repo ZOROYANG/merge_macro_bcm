@@ -45,11 +45,20 @@ void MatrixGenBcm(){
         for(int i = 0; i < 3; ++ i){
             len[i] = _length.at(i);
         }
-        printf("%lf %lf %lf\n", len[0], len[1], len[2]);
+        //printf("%lf %lf %lf\n", len[0], len[1], len[2]);
         int** cs;
         double** co;
         double** cl;
         
+        std::vector<std::vector<double> > tempvec;
+        matrix_A = new double**[Curmed];
+        for(int i = 0; i< static_cast<int>(Curmed); ++ i){
+            matrix_A[i] = new double*[cur_ele_id[i]];
+            for(int j = 0; j < cur_ele_id[i]; ++ j){
+                matrix_A[i][j] = new double[cur_ele_id[i]];
+            }
+        }
+            
         if(conductors.size() == 0){
             Configure mp(ori, len, sa, diele);
             mp.Debug();
@@ -59,29 +68,7 @@ void MatrixGenBcm(){
             fdmsp.solve();
             puts("solve end");
             
-            // add by [ym], attention getCap return type!
-            if(blocks.size() == 1){
-                printf("!!!begin passing matrix!!!\n");
-                std::vector<std::vector<double> > tempvec = fdmsp.getCap();
-                double** A = new double*[tempvec.size()];
-                for(int u = 0; u < static_cast<int>(tempvec.size()); ++ u){
-                    A[u] = new double[tempvec[u].size()];
-                    
-                }
-                printf("!!!finish allocation!!!\n");
-                
-                for(int u = 0; u < static_cast<int>(tempvec.size()); ++ u){
-                    for(int v = 0; v < static_cast<int>(tempvec[u].size()); ++ v){
-                        A[u][v] = tempvec[u][v];
-                    }
-                    
-                }
-                printf("!!!finish passing matrix!!!\n");
-                matrixbcm.data = A;
-                matrixbcm.row = cur_ele_id[0];
-                matrixbcm.col = cur_ele_id[0];
-                
-            }
+            tempvec = fdmsp.getCap();
         }else{
             co = new double*[conductors.size()];
             for(int i = 0; i < static_cast<int>(conductors.size()); ++ i){
@@ -129,45 +116,41 @@ void MatrixGenBcm(){
             puts("solve end");
             //fdmsp.solve();
             
-            if(blocks.size() == 1){
-                printf("!!!begin passing matrix!!!\n");
-                std::vector<std::vector<double> > tempvec = fdmsp.getCap();
-                double** A = new double*[tempvec.size()];
-                for(int u = 0; u < static_cast<int>(tempvec.size()); ++ u){
-                    A[u] = new double[tempvec[u].size()];
-                    
-                }
-                printf("!!!finish allocation!!!\n");
-                
-                for(int u = 0; u < static_cast<int>(tempvec.size()); ++ u){
-                    for(int v = 0; v < static_cast<int>(tempvec[u].size()); ++ v){
-                        A[u][v] = tempvec[u][v];
-                    }
-                    
-                }
-                printf("!!!finish passing matrix!!!\n");
-                matrixbcm.data = A;
-                matrixbcm.row = cur_ele_id[0];
-                matrixbcm.col = cur_ele_id[0];
-            }
+            tempvec = fdmsp.getCap();
             
-            printf("!!!HI!!!\n");
             for(int i = 0; i < static_cast<int>(conductors.size()); ++ i){
                 delete[] cs[i];
                 delete[] cl[i];
                 delete[] co[i];
             }
             
-            if(conductors.size() == 1){
-                delete cs;
-                delete cl;
-                delete co;
-            }else if(conductors.size() > 1){
-                delete[] cs;
-                delete[] cl;
-                delete[] co;
+            delete[] cs;
+            delete[] cl;
+            delete[] co;
+        }
+        
+        // add by [ym], attention getCap return type!
+        if(blocks.size() == 1){
+            printf("!!!begin passing matrix!!!\n");
+            /*
+            double** A = new double*[tempvec.size()];
+            for(int u = 0; u < static_cast<int>(tempvec.size()); ++ u){
+                A[u] = new double[tempvec[u].size()];
+                
             }
-            printf("!!!HI!!!\n");
+            printf("!!!finish allocation!!!\n");*/
+            
+            for(int u = 0; u < cur_ele_id[0]; ++ u){
+                for(int v = 0; v < cur_ele_id[0]; ++ v){
+                    matrix_A[0][u][v] = tempvec[u][v];
+                }
+            }
+            printf("!!!finish passing matrix!!!\n");
+            
+            matrixbcm.data = matrix_A[0];
+            matrixbcm.row = cur_ele_id[0];
+            matrixbcm.col = cur_ele_id[0];
+            
         }
         
         return;

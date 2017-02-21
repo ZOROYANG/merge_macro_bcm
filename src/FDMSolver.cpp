@@ -478,12 +478,6 @@ void FDM_Solver::Construct_Matrix_A22(){
     return;
 }
 
-namespace ssss
-{
-//Matrix_Sparse x;
-    //vector<int> i;
-}
-
 // dielectric value is diel, S may be a matrix
 void FDM_Solver::solve(){
     printf("in solve()\n");
@@ -492,44 +486,8 @@ void FDM_Solver::solve(){
         Cap = convert2Matrix(compute_Formula(A11, A12, A21, A22, inum, bnum));
         return;
     }else{
-        /*printf("in solve() else\n%d %d\n", inrnk, crnk);
-        for (auto x : A11.i) printf("%d ", x); puts("");
-        this->A11;
-        //this->A11.Debug("debug_A11.txt");
-        puts("this->A11");
-        
-        for (auto x : A11.i) printf("%d ", x); puts("");
-        //ssss::x.n_row = this->A11.n_row;
-        printf("%d\n", this->A11.i.size());
-        //ssss::x.i.clear();
-        //printf("%d\n", ssss::x.i.size());
-        
-        for (auto x : A11.i)
-        {
-            int y = x;
-            ssss::x.i.push_back(1);
-        }
-        */
-        printf("just Push_back...\n");
-        vector<double> ii;
-        for (int i=0; i<1024; ++i) {
-            printf("%lu\n", ii.size());
-            ii.push_back(0);
-        }
-        //ssss::x.i.push_back(1);
-        //ssss::x.i = this->A11.i;
-        //Matrix_Sparse x = this->A11;
-        printf("A11 OK\n");
-        this->A13.Debug("debug_A13.txt");
-        printf("A13 OK\n");
-        this->A31.Debug("debug_A31.txt");
-        printf("A31 OK\n");
-        this->A33.Debug("debug_A33.txt");
-        printf("A33 OK\n");
-        
-        cs_di tempc11 = compute_Formula(A33, A31, A13, A11, inrnk, crnk);
-        printf("compute_Formula over\n");
-        std::vector<std::vector<double> > c11 = convert2Matrix(tempc11);
+        printf("in solve() else\n%d %d\n", inrnk, crnk);
+        std::vector<std::vector<double> > c11 = convert2Matrix(compute_Formula(A33, A31, A13, A11, inrnk, crnk));
         printf("c11 over\n");
         std::vector<std::vector<double> > c22 = convert2Matrix(compute_Formula(A33, A32, A23, A22, inrnk, brnk));
         printf("c22 over\n");
@@ -635,7 +593,8 @@ cs_di FDM_Solver::compute_Formula(Matrix_Sparse iA11, Matrix_Sparse iA12, Matrix
     pCap.m = p_row;
     pCap.n = p_col;
     int countnz = 0;
-
+    
+    
     //pCap.p = new int[pCap.n + 1];
     std::vector<int> p_temp;
     std::vector<int> row_idx;
@@ -707,12 +666,30 @@ cs_di FDM_Solver::compute_Formula(Matrix_Sparse iA11, Matrix_Sparse iA12, Matrix
     pCap.i = &(row_idx[0]);
     pCap.p = &(p_temp[0]);
     pCap.x = &(value[0]);
+    
+    std::vector<std::vector<double> >  checkp = convert2Matrix(pCap);
+    FILE*  as;
+    as = fopen("debugfiles/pCap.txt", "w");
+    if(as == NULL){
+        printf("Cann't open %s\n", "debugfiles/pCap.txt");
+        exit(1);
+    }
+    fprintf(as, "%d %d", pCap.m, pCap.n);
+    fprintf(as, "\n");
+    for(int u = 0; u < static_cast<int>(checkp.size()); ++ u){
+        for(int v = 0; v < static_cast<int>(checkp[u].size()); ++ v){
+            fprintf(as, "%f ", checkp[u][v]);
+        }
+        fprintf(as, ";\n");
+    }
+    fclose(as);
 
     pCap.nzmax = countnz;
-        
+    puts("!!!br0!!!");    
     cs_di* res1 = cs_di_multiply(&a21, &pCap);
+    puts("!!!br1!!!");
     cs_di* res2 = cs_di_add(&a22, res1, 1, -1);
-
+    puts("!!!br2!!!");
     // need to delete the mem of rCap
     printf("Hello1!\n");
     
@@ -773,7 +750,7 @@ FDM_Solver::FDM_Solver(Configure* mconf) : macro_conf(mconf){
         this->uniform();
     }else{
         printf("do nothing!\n");
-        //this->nonuniform();
+        this->nonuniform();
     }
 }
 
@@ -2560,6 +2537,14 @@ void FDM_Solver::cmprsBoundary(){
                 
                 cmp_idx[ru] = cmp_idx[rd];
             }else{
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[ru][u] += Cap[rd][u];
+                }
+                
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[u][ru] += Cap[u][rd];
+                }
+                
                 cmp_idx[rd] = cmp_idx[ru];
             }
         }
@@ -2594,6 +2579,14 @@ void FDM_Solver::cmprsBoundary(){
                 
                 cmp_idx[ru] = cmp_idx[rd];
             }else{
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[ru][u] += Cap[rd][u];
+                }
+                
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[u][ru] += Cap[u][rd];
+                }
+                
                 cmp_idx[rd] = cmp_idx[ru];
             }
         }
@@ -2629,6 +2622,14 @@ void FDM_Solver::cmprsBoundary(){
                 
                 cmp_idx[ru] = cmp_idx[rd];
             }else{
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[ru][u] += Cap[rd][u];
+                }
+                
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[u][ru] += Cap[u][rd];
+                }
+                
                 cmp_idx[rd] = cmp_idx[ru];
             }
         }
@@ -2663,6 +2664,14 @@ void FDM_Solver::cmprsBoundary(){
                 
                 cmp_idx[ru] = cmp_idx[rd];
             }else{
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[ru][u] += Cap[rd][u];
+                }
+                
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[u][ru] += Cap[u][rd];
+                }
+                
                 cmp_idx[rd] = cmp_idx[ru];
             }
         }
@@ -2698,6 +2707,14 @@ void FDM_Solver::cmprsBoundary(){
                 
                 cmp_idx[ru] = cmp_idx[rd];
             }else{
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[ru][u] += Cap[rd][u];
+                }
+                
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[u][ru] += Cap[u][rd];
+                }
+                
                 cmp_idx[rd] = cmp_idx[ru];
             }
         }
@@ -2732,6 +2749,14 @@ void FDM_Solver::cmprsBoundary(){
                 
                 cmp_idx[ru] = cmp_idx[rd];
             }else{
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[ru][u] += Cap[rd][u];
+                }
+                
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[u][ru] += Cap[u][rd];
+                }
+                
                 cmp_idx[rd] = cmp_idx[ru];
             }
         }
@@ -2768,6 +2793,14 @@ void FDM_Solver::cmprsBoundary(){
                 
                 cmp_idx[ru] = cmp_idx[rd];
             }else{
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[ru][u] += Cap[rd][u];
+                }
+                
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[u][ru] += Cap[u][rd];
+                }
+                
                 cmp_idx[rd] = cmp_idx[ru];
             }
         }
@@ -2802,6 +2835,14 @@ void FDM_Solver::cmprsBoundary(){
                 
                 cmp_idx[ru] = cmp_idx[rd];
             }else{
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[ru][u] += Cap[rd][u];
+                }
+                
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[u][ru] += Cap[u][rd];
+                }
+                
                 cmp_idx[rd] = cmp_idx[ru];
             }
         }
@@ -2838,6 +2879,14 @@ void FDM_Solver::cmprsBoundary(){
                 
                 cmp_idx[ru] = cmp_idx[rd];
             }else{
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[ru][u] += Cap[rd][u];
+                }
+                
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[u][ru] += Cap[u][rd];
+                }
+                
                 cmp_idx[rd] = cmp_idx[ru];
             }
         }
@@ -2872,6 +2921,14 @@ void FDM_Solver::cmprsBoundary(){
                 
                 cmp_idx[ru] = cmp_idx[rd];
             }else{
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[ru][u] += Cap[rd][u];
+                }
+                
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[u][ru] += Cap[u][rd];
+                }
+                
                 cmp_idx[rd] = cmp_idx[ru];
             }
         }
@@ -2907,6 +2964,14 @@ void FDM_Solver::cmprsBoundary(){
                 
                 cmp_idx[ru] = cmp_idx[rd];
             }else{
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[ru][u] += Cap[rd][u];
+                }
+                
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[u][ru] += Cap[u][rd];
+                }
+                
                 cmp_idx[rd] = cmp_idx[ru];
             }
         }
@@ -2941,6 +3006,14 @@ void FDM_Solver::cmprsBoundary(){
                 
                 cmp_idx[ru] = cmp_idx[rd];
             }else{
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[ru][u] += Cap[rd][u];
+                }
+                
+                for(int u = 0; u < static_cast<int>(Cap[ru].size()); ++ u){
+                    Cap[u][ru] += Cap[u][rd];
+                }
+                
                 cmp_idx[rd] = cmp_idx[ru];
             }
         }
