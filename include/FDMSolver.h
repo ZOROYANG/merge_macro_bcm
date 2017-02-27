@@ -74,6 +74,10 @@ public:
     std::vector<double> eleY;
     std::vector<double> eleZ;
     
+    std::vector<int> grid_numc;
+    
+    std::vector<double> Square;
+    
     double precision = 1e-4;
     
     double stepX = 0.;
@@ -87,6 +91,7 @@ public:
     void nonuniform();
     void uniform();
     void cmprsBoundary();
+    void cohesionCond();
     
     bool isInsideCond(double x, double y, double z);
     cs_di compute_Formula(Matrix_Sparse iA11, Matrix_Sparse iA12, Matrix_Sparse iA21, Matrix_Sparse iA22, int p_row, int p_col);
@@ -103,6 +108,8 @@ public:
     void Construct_Matrix_A11_A12_A13_nuf();
     void Construct_Matrix_A21_A22_A23_nuf();
     void Construct_Matrix_A31_A32_A33_nuf();
+    
+    void Construct_Square();
     
     void solve();
     std::vector<std::vector<double> > getCap();

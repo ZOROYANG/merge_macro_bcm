@@ -15,7 +15,7 @@
 class Configure {
     int num_cond = 0;                             // the number of conductors
     
-    double diel;	        // dielectric value
+    
 
     Debugger debg;
     
@@ -34,6 +34,8 @@ public:
     double** cond_ori = NULL;        // the conductors' origin points
     double** cond_len = NULL;        // the conductors' 3-D size
     int** cond_seg = NULL;           // the conductors' segmentation
+    
+    double diel;	        // dielectric value
     
     ~Configure();
     void Debug();

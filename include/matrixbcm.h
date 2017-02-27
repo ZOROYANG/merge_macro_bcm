@@ -12,6 +12,7 @@
 *compute G,H,BCM matrix
 */
 void MatrixGenBcm(){
+    /*
     printf("\nbasic info:\nlength: %lf %lf %lf\n", _length[0], _length[1], _length[2]);
     for(int i = 0; i < static_cast<int>(ele_x.size()); ++ i){
         printf("%d segs in x dir.: %d\n", i, ele_x[i]);
@@ -34,7 +35,7 @@ void MatrixGenBcm(){
             printf("%lf ", Areas[i][j]);
         }
         printf("\n");
-    }
+    }*/
     
     // add by [ym]
     if(useFDM && Curmed == 1){

@@ -39,7 +39,6 @@ FDM_Solver::~FDM_Solver() {
         this->A22.matrixFree();
     }else{
         printf("~~~In ~FDMSolver MultiConductors Branch~~~\n");
-        /*
         this->A11.matrixFree();
         this->A12.matrixFree();
         this->A13.matrixFree();
@@ -49,7 +48,6 @@ FDM_Solver::~FDM_Solver() {
         this->A31.matrixFree();
         this->A32.matrixFree();
         this->A33.matrixFree();
-        */
     } 
 }
 
@@ -504,10 +502,10 @@ void FDM_Solver::solve(){
         for(int j = 0; j < static_cast<int>(c11.size()); ++ j){
             std::vector<double> rvec;
             for(int i = 0; i < static_cast<int>(c11[j].size()); ++ i){
-                rvec.push_back(c11[j][i]);
+                rvec.push_back(this->macro_conf->diel * Square[j] * c11[j][i]);
             }
             for(int i = 0; i < static_cast<int>(c12[j].size()); ++ i){
-                rvec.push_back(c12[j][i]);
+                rvec.push_back(this->macro_conf->diel * Square[j] * c12[j][i]);
             }
             Cap.push_back(rvec);
         }
@@ -515,10 +513,10 @@ void FDM_Solver::solve(){
         for(int j = 0; j < static_cast<int>(c21.size()); ++ j){
             std::vector<double> rvec;
             for(int i = 0; i < static_cast<int>(c21[j].size()); ++ i){
-                rvec.push_back(c21[j][i]);
+                rvec.push_back(this->macro_conf->diel * Square[j + crnk] * c21[j][i]);
             }
             for(int i = 0; i < static_cast<int>(c22[j].size()); ++ i){
-                rvec.push_back(c22[j][i]);
+                rvec.push_back(this->macro_conf->diel * Square[j + crnk] * c22[j][i]);
             }
             Cap.push_back(rvec);
         }
@@ -527,6 +525,8 @@ void FDM_Solver::solve(){
         
         this->cmprsBoundary();
         printf("compressed size: %lu\n", Cap.size());
+        //this->cohesionCond();
+        //printf("cohesioned size: %lu\n", Cap.size());
         FILE* output;
 	output = fopen(ans_path.c_str(), "w");
 	if(output == NULL){
@@ -883,12 +883,11 @@ void FDM_Solver::nonuniform(){
     crnk = 0;
     
     // total grid number of each conductor
-    int *grid_numc = new int[macro_conf->getNumCond()];
     for(int i = 0; i < macro_conf->getNumCond(); ++ i){
-        grid_numc[i] = (macro_conf->cond_seg[i][0] * macro_conf->cond_seg[i][1]
+        grid_numc.push_back((macro_conf->cond_seg[i][0] * macro_conf->cond_seg[i][1]
             + macro_conf->cond_seg[i][0] * macro_conf->cond_seg[i][2]
-            + macro_conf->cond_seg[i][1] * macro_conf->cond_seg[i][2]) * 2;
-            crnk += grid_numc[i];
+            + macro_conf->cond_seg[i][1] * macro_conf->cond_seg[i][2]) * 2);
+        crnk += grid_numc[i];
     }
     
     // the amount of boundary elements
@@ -960,6 +959,8 @@ void FDM_Solver::nonuniform(){
 
     printf(">>Begin MAP\n");
     int idx  = 0;
+    
+    // order those on the surface of conductors
     for(int i = 0; i < macro_conf->getNumCond(); ++ i){
         int itr = 0;
         while(itr < static_cast<int>(gridX.size()) && gridX[itr] < macro_conf->cond_ori[i][0]){
@@ -997,9 +998,9 @@ void FDM_Solver::nonuniform(){
         // order those on the surface of conductors
         // bottom
         for(int j = startY; j < endY; ++ j){
-            for(int i = startX; i < endX; ++ i){
+            for(int u = startX; u < endX; ++ u){
                 TPOINT tp;
-                tp.x = (gridX[i] + gridX[i + 1]) / 2;
+                tp.x = (gridX[u] + gridX[u + 1]) / 2;
                 tp.y = (gridY[j] + gridY[j + 1]) / 2;
                 tp.z = gridZ[startZ];
                 i2p.insert(std::make_pair(idx, tp));
@@ -1023,9 +1024,9 @@ void FDM_Solver::nonuniform(){
 
         // front
         for(int k = startZ; k < endZ; ++ k){
-            for(int i = startX; i < endX; ++ i){
+            for(int u = startX; u < endX; ++ u){
                 TPOINT tp;
-                tp.x = (gridX[i] + gridX[i + 1]) / 2;
+                tp.x = (gridX[u] + gridX[u + 1]) / 2;
                 tp.y = gridY[startY];
                 tp.z = (gridZ[k] + gridZ[k + 1]) / 2;
                 i2p.insert(std::make_pair(idx, tp));
@@ -1049,9 +1050,9 @@ void FDM_Solver::nonuniform(){
 
         // back
         for(int k = startZ; k < endZ; ++ k){
-            for(int i = endX - 1; i >= startX; -- i){
+            for(int u = endX - 1; u >= startX; -- u){
                 TPOINT tp;
-                tp.x = (gridX[i] + gridX[i + 1]) / 2;
+                tp.x = (gridX[u] + gridX[u + 1]) / 2;
                 tp.y = gridY[endY];
                 tp.z = (gridZ[k] + gridZ[k + 1]) / 2;
                 i2p.insert(std::make_pair(idx, tp));
@@ -1062,9 +1063,9 @@ void FDM_Solver::nonuniform(){
 
         // top
         for(int j = startY; j < endY; ++ j){
-            for(int i = startX; i < endX; ++ i){
+            for(int u = startX; u < endX; ++ u){
                 TPOINT tp;
-                tp.x = (gridX[i] + gridX[i + 1]) / 2;
+                tp.x = (gridX[u] + gridX[u + 1]) / 2;
                 tp.y = (gridY[j] + gridY[j + 1]) / 2;
                 tp.z = gridZ[endZ];
                 i2p.insert(std::make_pair(idx, tp));
@@ -1153,6 +1154,7 @@ void FDM_Solver::nonuniform(){
         }
     }
     
+    // order those inside macro
     for(int k = 0; k < static_cast<int>(gridZ.size()) - 1; ++ k){
         for(int j = 0; j < static_cast<int>(gridY.size()) - 1; ++ j){
             for(int i = 0; i < static_cast<int>(gridX.size()) - 1; ++ i){
@@ -1225,6 +1227,8 @@ void FDM_Solver::nonuniform(){
     }
     eleZ.push_back(gridZ[gridZ.size() - 1]);
     
+    this->Construct_Square();
+    
     this->Construct_Matrix_A11_A12_A13_nuf();
     this->A11.Debug("A11.txt");
     this->A12.Debug("A12.txt");
@@ -1240,22 +1244,14 @@ void FDM_Solver::nonuniform(){
     this->A31.Debug("A31.txt");
     this->A32.Debug("A32.txt");
     this->A33.Debug("A33.txt");
-    
-    printf("have a try\n");
-    
-    printf("%lu\n", A11.i.size());
-    //solve();
-    printf("Well\n");
-    
-    delete grid_numc;
 }
 
 bool FDM_Solver::isInsideCond(double x, double y, double z){
     bool inside = false;
     for(int cid = 0; cid < macro_conf->getNumCond(); ++ cid){
-        if((x > macro_conf->cond_ori[cid][0]) && (x < (macro_conf->cond_ori[cid][0] + macro_conf->cond_len[cid][0]))){
-            if((y > macro_conf->cond_ori[cid][1]) && (y < (macro_conf->cond_ori[cid][1] + macro_conf->cond_len[cid][1]))){
-                if((z > macro_conf->cond_ori[cid][2]) && (z < (macro_conf->cond_ori[cid][2] + macro_conf->cond_len[cid][2]))){
+        if((x > (macro_conf->cond_ori[cid][0] + stepX * precision)) && (x < (macro_conf->cond_ori[cid][0] + macro_conf->cond_len[cid][0] - stepX * precision))){
+            if((y > (macro_conf->cond_ori[cid][1] + stepY * precision)) && (y < (macro_conf->cond_ori[cid][1] + macro_conf->cond_len[cid][1] - stepY * precision))){
+                if((z > (macro_conf->cond_ori[cid][2] + stepZ * precision)) && (z < (macro_conf->cond_ori[cid][2] + macro_conf->cond_len[cid][2] - stepZ * precision))){
                     //printf("z ");
                     inside = true;
                     break;
@@ -1265,6 +1261,22 @@ bool FDM_Solver::isInsideCond(double x, double y, double z){
     }
     return inside;
 }
+/*
+bool FDM_Solver::isInsideCond(double x, double y, double z){
+    bool inside = false;
+    for(int cid = 0; cid < macro_conf->getNumCond(); ++ cid){
+        if((x > (macro_conf->cond_ori[cid][0])) && (x < (macro_conf->cond_ori[cid][0] + macro_conf->cond_len[cid][0]))){
+            if((y > (macro_conf->cond_ori[cid][1])) && (y < (macro_conf->cond_ori[cid][1] + macro_conf->cond_len[cid][1]))){
+                if((z > (macro_conf->cond_ori[cid][2])) && (z < (macro_conf->cond_ori[cid][2] + macro_conf->cond_len[cid][2]))){
+                    //printf("z ");
+                    inside = true;
+                    break;
+                }
+            }
+        }
+    }
+    return inside;
+}*/
 
 void FDM_Solver::Construct_Matrix_A11_A12_A13_nuf(){
     A11.n_row = crnk;
@@ -1876,16 +1888,16 @@ void FDM_Solver::Construct_Matrix_A21_A22_A23_nuf(){
                 rnk2 -= crnk;
                 if(rnk2 >= brnk){
                     rnk2 -= brnk;
-                    A23.i.push_back(j);
+                    A23.i.push_back(j - crnk);
                     A23.j.push_back(rnk2);
                     A23.x.push_back(h1/(h1 + h2)/h2);
                 }else{
-                    A22.i.push_back(j);
+                    A22.i.push_back(j - crnk);
                     A22.j.push_back(rnk2);
                     A22.x.push_back(h1/(h1 + h2)/h2);
                 }
             }else{
-                A21.i.push_back(j);
+                A21.i.push_back(j - crnk);
                 A21.j.push_back(rnk2);
                 A21.x.push_back(h1/(h1 + h2)/h2);
             }
@@ -3041,6 +3053,177 @@ void FDM_Solver::cmprsBoundary(){
     Cap.clear();
     
     Cap = compressed;
+    
+    return;
+}
+
+void FDM_Solver::Construct_Square(){
+    int trnk = brnk + crnk; 
+    for(int i = 0; i < trnk; ++ i){
+        bool find = false;
+        double l, w;
+        TPOINT tp = i2p[i];
+        
+        // on the macro's surface?
+        if(fabs(tp.x - gridX[gridX.size() - 1]) < precision * stepX || fabs(tp.x - gridX[0]) < precision * stepX){
+            for(int j = 0; j < static_cast<int>(gridY.size()); ++ j){
+                if(gridY[j] > tp.y){
+                    l = gridY[j] - gridY[j - 1];
+                    break;
+                }
+            }
+            
+            for(int j = 0; j < static_cast<int>(gridZ.size()); ++ j){
+                if(gridZ[j] > tp.z){
+                    w = gridZ[j] - gridZ[j - 1];
+                    break;
+                }
+            }
+            find = true;
+        }else if(fabs(tp.y - gridY[gridY.size() - 1]) < precision * stepY || fabs(tp.y - gridY[0]) < precision * stepY){
+            for(int j = 0; j < static_cast<int>(gridX.size()); ++ j){
+                if(gridX[j] > tp.x){
+                    l = gridX[j] - gridX[j - 1];
+                    break;
+                }
+            }
+            
+            for(int j = 0; j < static_cast<int>(gridZ.size()); ++ j){
+                if(gridZ[j] > tp.z){
+                    w = gridZ[j] - gridZ[j - 1];
+                    break;
+                }
+            }
+            find = true;
+        }else if(fabs(tp.z - gridZ[gridZ.size() - 1]) < precision * stepZ || fabs(tp.z - gridZ[0]) < precision * stepZ){
+            for(int j = 0; j < static_cast<int>(gridY.size()); ++ j){
+                if(gridY[j] > tp.y){
+                    l = gridY[j] - gridY[j - 1];
+                    break;
+                }
+            }
+            
+            for(int j = 0; j < static_cast<int>(gridX.size()); ++ j){
+                if(gridX[j] > tp.x){
+                    w = gridX[j] - gridX[j - 1];
+                    break;
+                }
+            }
+            find = true;
+        }else{
+            // on the conductors' surface?
+            for(int cid = 0; cid < macro_conf->getNumCond(); ++ cid){
+                if(fabs(tp.x - macro_conf->cond_ori[cid][0]) < precision * stepX || fabs(tp.x - macro_conf->cond_ori[cid][0] - macro_conf->cond_len[cid][0]) < precision * stepX){
+                    for(int j = 0; j < static_cast<int>(gridY.size()); ++ j){
+                        if(gridY[j] > tp.y){
+                            l = gridY[j] - gridY[j - 1];
+                            break;
+                        }
+                    }
+                    
+                    for(int j = 0; j < static_cast<int>(gridZ.size()); ++ j){
+                        if(gridZ[j] > tp.z){
+                            w = gridZ[j] - gridZ[j - 1];
+                            break;
+                        }
+                    }
+                    
+                    find = true;
+                    break;
+                }else if(fabs(tp.y - macro_conf->cond_ori[cid][1]) < precision * stepY || fabs(tp.y - macro_conf->cond_ori[cid][1] - macro_conf->cond_len[cid][1]) < precision * stepY){
+                    for(int j = 0; j < static_cast<int>(gridX.size()); ++ j){
+                        if(gridX[j] > tp.x){
+                            l = gridX[j] - gridX[j - 1];
+                            break;
+                        }
+                    }
+                    
+                    for(int j = 0; j < static_cast<int>(gridZ.size()); ++ j){
+                        if(gridZ[j] > tp.z){
+                            w = gridZ[j] - gridZ[j - 1];
+                            break;
+                        }
+                    }
+                    
+                    find = true;
+                    break;
+                }else if(fabs(tp.z - macro_conf->cond_ori[cid][2]) < precision * stepZ || fabs(tp.z - macro_conf->cond_ori[cid][2] - macro_conf->cond_len[cid][2]) < precision * stepZ){
+                    for(int j = 0; j < static_cast<int>(gridY.size()); ++ j){
+                        if(gridY[j] > tp.y){
+                            l = gridY[j] - gridY[j - 1];
+                            break;
+                        }
+                    }
+                    
+                    for(int j = 0; j < static_cast<int>(gridX.size()); ++ j){
+                        if(gridX[j] > tp.x){
+                            w = gridX[j] - gridX[j - 1];
+                            break;
+                        }
+                    }
+                    
+                    find = true;
+                    break;
+                }
+            }
+        }
+        
+        if(!find){
+            printf("Unexpected!\ntp%d: (%lf, %lf, %lf)\n", i, tp.x, tp.y, tp.z);
+        }
+        
+        Square.push_back(l * w);
+    }
+    
+    return;
+}
+
+void FDM_Solver::cohesionCond(){
+    std::vector<int> arrow;
+    int win_Top = 0;
+    int win_Bot = 0;
+    
+    for(int i = 0; i < macro_conf->getNumCond(); ++ i){
+        arrow.push_back(win_Top);
+        win_Bot = win_Top;
+        win_Top += grid_numc[i];
+        for(int j = win_Bot + 1; j < win_Top;++ j){
+            for(int k = 0; k < static_cast<int>(Cap[j].size()); ++ k){
+                Cap[win_Bot][k] += Cap[j][k];
+            }
+        }
+        for(int j = win_Bot + 1; j < win_Top;++ j){
+            for(int k = 0; k < static_cast<int>(Cap.size()); ++ k){
+                Cap[k][win_Bot] += Cap[k][j];
+            }
+        }
+    }
+    
+    std::vector<std::vector<double> > comprd;
+    for(int i = 0; i < macro_conf->getNumCond(); ++ i){
+        std::vector<double> rvec;
+        for(int j = 0; j < static_cast<int>(arrow.size()); ++ j){
+            rvec.push_back(Cap[arrow[i]][arrow[j]]);
+        }
+        for(int j = crnk; j < static_cast<int>(Cap.size()); ++ j){
+            rvec.push_back(Cap[arrow[i]][j]);
+        }
+        comprd.push_back(rvec);
+    }
+    
+    for(int i = crnk; i < static_cast<int>(Cap.size()); ++ i){
+        std::vector<double> rvec;
+        for(int j = 0; j < static_cast<int>(arrow.size()); ++ j){
+            rvec.push_back(Cap[i][arrow[j]]);
+        }
+        for(int j = crnk; j < static_cast<int>(Cap.size()); ++ j){
+            rvec.push_back(Cap[i][j]);
+        }
+        comprd.push_back(rvec);
+    }
+    
+    Cap.clear();
+    Cap = comprd;
     
     return;
 }

@@ -23,6 +23,6 @@ void Matrix_Sparse::matrixFree(){
 }
 
 void Matrix_Sparse::Debug(std::string s){
-    //this->debg.Matrix_print(s, this->n_row, this->n_col, this->nz, this->i, this->j, this->x, this->Ai, this->Ap, this->Ax);
+    this->debg.Matrix_print(s, this->n_row, this->n_col, this->nz, this->i, this->j, this->x, this->Ai, this->Ap, this->Ax);
     return;
 }
